@@ -1,8 +1,10 @@
+/**
+ * DO NOT EDIT
+ * Contact display list
+ */
+
 package com.catalizeapp.catalize_ss16_v5;
 
-/**
- * Created by meenal on 7/11/2016.
- */
 import java.util.ArrayList;
 
 public class ContactsListClass {
