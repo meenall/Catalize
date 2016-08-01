@@ -1,4 +1,11 @@
+/**
+ * A login screen that offers login via email/password.
+ * Currently has minimal security checks
+ * Shared Prefs "off"
+ */
+
 package com.catalizeapp.catalize_ss16_v5;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
