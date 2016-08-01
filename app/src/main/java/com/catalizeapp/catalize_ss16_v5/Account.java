@@ -1,3 +1,8 @@
+/**
+ * Responsible for creation and execution of introduction
+ * BACKEND communicates here
+ */
+
 package com.catalizeapp.catalize_ss16_v5;
 
 import android.Manifest;
