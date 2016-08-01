@@ -1,3 +1,9 @@
+/**
+ * Main screen - displays contact list.
+ * Asks for contact permission.
+ * Deny permission twice = crash. Dependent on Shared Prefs working
+ */
+
 package com.catalizeapp.catalize_ss16_v5;
 
 import android.*;
