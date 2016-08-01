@@ -1,3 +1,7 @@
+/**
+ * Self explanatory
+ */
+
 package com.catalizeapp.catalize_ss16_v5;
 
 import android.content.Context;
