@@ -1,8 +1,9 @@
-package com.catalizeapp.catalize_ss16_v5;
-
 /**
- * Created by meenal on 7/11/2016.
+ * DO NOT EDIT
+ * Adapter for contact listView
  */
+
+package com.catalizeapp.catalize_ss16_v5;
 
 import android.content.ContentUris;
 import android.content.Context;
