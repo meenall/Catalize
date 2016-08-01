@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/nameerror"
+        android:text="No contacts selected! Choose at least one to continue."
+        android:layout_width="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="normal" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="#ffffff"
+        android:text="Ok"
+        android:textSize="16sp"
+        android:id="@+id/buttonback"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

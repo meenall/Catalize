@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Catalize 2.0</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_1">Report bug</string>
+    <string name="searchable"> Search </string>
+    <string name="menu_search">Search</string>
+    <string name = "menu_2">Log out</string>
+</resources>
