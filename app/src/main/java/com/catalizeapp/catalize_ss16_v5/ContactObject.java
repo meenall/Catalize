@@ -1,8 +1,10 @@
+/**
+ * DO NOT EDIT
+ * Contacts Object
+ */
+
 package com.catalizeapp.catalize_ss16_v5;
 
-/**
- * Created by meenal on 7/11/2016.
- */
 public class ContactObject {
 
     private String contactName;
