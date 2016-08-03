@@ -80,7 +80,7 @@ public class Account extends AppCompatActivity
                         0);
             }
         }
-        sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss25", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
 
         //Your toolbar is now an action bar and you can use it like you always do, for example:
         if (getSupportActionBar() != null){

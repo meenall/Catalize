@@ -544,15 +544,13 @@ public class Nav extends AppCompatActivity
             Intent change = new Intent(Nav.this, Nav.class);
             startActivity(change);
         } else if (id == R.id.log_out) {
-            SharedPreferences myPrefs = getSharedPreferences("MY",
-                    MODE_PRIVATE);
-            SharedPreferences.Editor editor = myPrefs.edit();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.commit();
-            Intent intent = new Intent(Nav.this,
-                    LoginActivity.class);
+            Intent intent = new Intent(Nav.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

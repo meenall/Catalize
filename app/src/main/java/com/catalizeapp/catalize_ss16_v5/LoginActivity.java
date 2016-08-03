@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final EditText lastName = (EditText) findViewById(R.id.last_name);
         final EditText email = (EditText) findViewById(R.id.email);
 
-        sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss25", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
 
         if (sharedPreferences.getString("first_name","")!="") {
             if (sharedPreferences.getString("last_name","")!=""){
