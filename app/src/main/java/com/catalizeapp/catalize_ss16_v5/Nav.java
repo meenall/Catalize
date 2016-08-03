@@ -43,6 +43,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -468,11 +469,10 @@ public class Nav extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, Nav.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra("Exit me", true);
-        startActivity(intent);
-        finish();
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 
     @Override
@@ -544,12 +544,15 @@ public class Nav extends AppCompatActivity
             Intent change = new Intent(Nav.this, Nav.class);
             startActivity(change);
         } else if (id == R.id.log_out) {
-            Intent intentLogOut = new Intent(Nav.this, LoginActivity.class);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences myPrefs = getSharedPreferences("MY",
+                    MODE_PRIVATE);
+            SharedPreferences.Editor editor = myPrefs.edit();
             editor.clear();
             editor.commit();
-            startActivity(intentLogOut);
-            finish();
+            Intent intent = new Intent(Nav.this,
+                    LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
