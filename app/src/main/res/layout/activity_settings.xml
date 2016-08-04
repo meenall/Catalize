@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="6dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.catalizeapp.catalize_ss16_v5.SettingsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/toolbar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+
+    <ImageView
+        android:id="@+id/imageViewEdit"
+        android:layout_width="120dp"
+        android:layout_height="130dp"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:src="@drawable/user2"
+        android:scaleType="fitXY"
+        android:layout_row="6"
+        android:layout_column="0"
+        android:layout_gravity="center_vertical"
+        android:layout_alignTop="@+id/toolbar"
+        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:background="#ffffff"
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="bottom|end"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_below="@+id/imageViewEdit"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="46dp">
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="First name"
+        android:ems="10"
+        android:id="@+id/first_name_edit"
+        android:textSize="20sp"
+        android:textColorHint="@color/black"
+        android:backgroundTint="@color/black"
+        android:textColor="@color/black"
+        android:textCursorDrawable="@null"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Last name"
+        android:ems="10"
+        android:id="@+id/last_name_edit"
+        android:textSize="20sp"
+        android:textColorHint="@color/black"
+        android:backgroundTint="@color/black"
+        android:textColor="@color/black"
+        android:textCursorDrawable="@null"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Email"
+        android:ems="10"
+        android:id="@+id/email_edit"
+        android:textSize="20sp"
+        android:textColorHint="@color/black"
+        android:backgroundTint="@color/black"
+        android:textColor="@color/black"
+        android:textColorHighlight="#ffffff"
+        android:textCursorDrawable="@null"/>
+    </LinearLayout>
+
+    <Button
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:textColor="#ffffff"
+        android:textSize="19sp"
+        android:text="Save"
+        android:textStyle="bold"
+        android:id="@+id/save_prefs"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

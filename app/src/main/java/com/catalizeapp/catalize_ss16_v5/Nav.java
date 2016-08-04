@@ -67,7 +67,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.ContentResolver;
-
 /**
  * Main screen - displays contact list.
  * Asks for contact permission.
@@ -82,17 +81,20 @@ public class Nav extends AppCompatActivity
     public static String person2 = "";
     public static String number1 = "";
     public static String number2 = "";
+    public TextView displayName;
+    public TextView displayEmail;
     boolean flag = false;
     public static boolean newbie = false;
-    public static String newContact = "";
     ContactsAdapter objAdapter;
-    ActionMenuItemView searchView2;
     SearchView searchView;
     ListView lv = null;
     LinearLayout llContainer = null;
     Button btnOK = null;
     RelativeLayout rlPBContainer = null;
     private SharedPreferences sharedPreferences;
+    private String firstName;
+    private String lastName;
+    private String personEmail;
 
     protected void onCreate(Bundle savedInstanceState) {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -106,9 +108,19 @@ public class Nav extends AppCompatActivity
         setContentView(R.layout.activity_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
-        //setContentView(R.layout.activity_contacts);
+        firstName = sharedPreferences.getString("first_name", "");
+        lastName = sharedPreferences.getString("last_name", "");
+        personEmail = sharedPreferences.getString("email", "");
+        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
+        View header = LayoutInflater.from(this).inflate(R.layout.nav_header_nav, null);
+        navView.addHeaderView(header);
+        displayName = (TextView) header.findViewById(R.id.textViewPerson);
+        displayEmail = (TextView) header.findViewById(R.id.textViewEmail);
+        displayName.setText(firstName + " " + lastName);
+        displayEmail.setText(personEmail);
+
+
         rlPBContainer = (RelativeLayout) findViewById(R.id.pbcontainer);
         llContainer = (LinearLayout) findViewById(R.id.data_container);
         btnOK = (Button) findViewById(R.id.include).findViewById(R.id.include).findViewById(R.id.connect);
@@ -538,8 +550,8 @@ public class Nav extends AppCompatActivity
             Intent intentReportBug = new Intent(Nav.this, ReportBug.class); //
             startActivity(intentReportBug);
         } else if (id == R.id.settings) {
-            //Intent change = new Intent(Nav.this, Contacts.class);
-            //startActivity(change);
+            Intent intentSettings = new Intent(Nav.this, SettingsActivity.class);
+            startActivity(intentSettings);
         } else if (id == R.id.contacts) {
             Intent change = new Intent(Nav.this, Nav.class);
             startActivity(change);
@@ -565,6 +577,16 @@ public class Nav extends AppCompatActivity
         searchView.clearFocus();
         searchView.setQuery("", false);
         return true;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        firstName = sharedPreferences.getString("first_name", "");
+        lastName = sharedPreferences.getString("last_name", "");
+        personEmail = sharedPreferences.getString("email", "");
+        displayName.setText(firstName + " " + lastName);
+        displayEmail.setText(personEmail);
+
     }
 
 }

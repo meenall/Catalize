@@ -26,7 +26,7 @@ public class ReportBug extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_bug);
 
-        sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss25", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
 
         //Intent intent = getIntent();
         //final String personName = intent.getStringExtra("name_value").toString();

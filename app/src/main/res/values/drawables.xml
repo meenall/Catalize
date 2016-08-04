@@ -5,4 +5,9 @@
     <item name="ic_menu_manage" type="drawable">@android:drawable/ic_menu_manage</item>
     <item name="ic_menu_share" type="drawable">@android:drawable/ic_menu_share</item>
     <item name="ic_menu_send" type="drawable">@android:drawable/ic_menu_send</item>
+    <item name = "ic_menu_call" type = "drawable"> @android:drawable/ic_menu_call</item>
+    <item name = "ic_report_bug" type = "drawable"> @drawable/ic_report_bug</item>
+    <item name  = "ic_contacts" type = "drawable">@drawable/ic_contacts</item>
+    <item name = "ic_log_out" type = "drawable">@drawable/ic_log_out</item>
 </resources>
+

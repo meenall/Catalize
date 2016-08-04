@@ -7,6 +7,7 @@ package com.catalizeapp.catalize_ss16_v5;
 
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,7 @@ public class ContactsAdapter extends BaseAdapter {
     LayoutInflater inflater;
     private List<ContactObject> mainDataList = null;
     private ArrayList<ContactObject> arraylist;
+    private SharedPreferences sharedPreferences;
     public ContactsAdapter(Context context, List<ContactObject> mainDataList) {
 
         mContext = context;

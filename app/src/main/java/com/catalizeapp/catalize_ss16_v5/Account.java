@@ -117,7 +117,7 @@ public class Account extends AppCompatActivity
                                     // edit text
                                     result = userInput.getText().toString();
                                     result2 = userInput2.getText().toString();
-                                    prompt.setText("Hello " + result + ", meet " + result2 + ". I am introducing you two because ");
+                                    prompt.append("Hello " + result + ", meet " + result2 + ". I am introducing you two because ");
                                    // prompt.requestFocus();
                                     //prompt.setText("Hello " + result + ", meet " + result2 + ". I am introducing you two because...");
                                     //Contacts.person1 = result;
@@ -160,12 +160,12 @@ public class Account extends AppCompatActivity
                                     // edit text
                                     result = userInput.getText().toString();
                                     if (Nav.person1.contains("@")) {
-                                        prompt.setText("Hello " + result + ", meet " + Nav.person2 + ". I am introducing you two because ");
+                                        prompt.append("Hello " + result + ", meet " + Nav.person2 + ". I am introducing you two because ");
                                        // prompt.requestFocus();
                                         //prompt.setText("Hello " + result + ", meet " + Contacts.person2 + ". I am introducing you two because...");
                                     } else {
 
-                                        prompt.setText("Hello " + Nav.person1 + ", meet " + result + ". I am introducing you two because ");
+                                        prompt.append("Hello " + Nav.person1 + ", meet " + result + ". I am introducing you two because ");
                                        // prompt.requestFocus();
                                     }
                                     //Contacts.person1 = result;
@@ -178,7 +178,7 @@ public class Account extends AppCompatActivity
             alertDialog.show();
 
         } else {
-            prompt.setText("Hello " + Nav.person1 + ", meet " + Nav.person2 + ". I am introducing you two because ");
+            prompt.append("Hello " + Nav.person1 + ", meet " + Nav.person2 + ". I am introducing you two because ");
             //prompt.requestFocus();
         }
         prompt.requestFocus();
@@ -239,11 +239,11 @@ public class Account extends AppCompatActivity
                 });
                 dialog.show();
 
-                //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, "Hello " + Contacts.person2 + "! You've recieved an introduction from " + personName + " through Catalize, the networking and connections app:", null, null);
+                //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, "Hello " + Contacts.person2 + "! You've received an introduction from " + personName + " through Catalize, the networking and connections app:", null, null);
                 //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, et.getText().toString(), null, null);
                 //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, "Respond to this message to continue the conversation.", null, null);
 
-                //SmsManager.getDefault().sendTextMessage(Contacts.number1, null, "Hello " + Contacts.person1 + "! You've recieved an introduction from " + personName + " through Catalize, the networking and connections app:", null, null);
+                //SmsManager.getDefault().sendTextMessage(Contacts.number1, null, "Hello " + Contacts.person1 + "! You've received an introduction from " + personName + " through Catalize, the networking and connections app:", null, null);
                 //SmsManager.getDefault().sendTextMessage(Contacts.number1, null, et.getText().toString(), null, null);
                 //SmsManager.getDefault().sendTextMessage(Contacts.number1, null, "Respond to this message to continue the conversation.", null, null);
 

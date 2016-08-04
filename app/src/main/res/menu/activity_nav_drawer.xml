@@ -4,26 +4,26 @@
         android:id="@+id/menu_top"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/settings"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Settings"/>
+            android:id="@+id/contacts"
+            android:icon="@drawable/ic_contacts"
+            android:title="@string/contacts"/>
 
         <item
-            android:id="@+id/contacts"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Contacts" >
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/settings"            >
         </item>
 
         <item
             android:id="@+id/bug"
-            android:icon="@drawable/ic_menu_send"
-            android:title="Report Bug" >
+            android:icon="@drawable/ic_report_bug"
+            android:title="@string/report_bug" >
         </item>
 
         <item
             android:id="@+id/log_out"
-            android:icon="@drawable/ic_menu_send"
-            android:title="Log Out" >
+            android:icon="@drawable/ic_log_out"
+            android:title="@string/log_out" >
         </item>
     </group>
 </menu>
