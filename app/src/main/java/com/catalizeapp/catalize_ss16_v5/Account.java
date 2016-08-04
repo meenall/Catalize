@@ -338,8 +338,12 @@ public class Account extends AppCompatActivity
             Intent change = new Intent(Account.this, Nav.class);
             startActivity(change);
         } else if (id == R.id.log_out) {
-            Intent intentLogOut = new Intent(Account.this, LoginActivity.class);
-            startActivity(intentLogOut);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.commit();
+            Intent intent = new Intent(Account.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             finish();
         }
 
@@ -354,6 +358,8 @@ public class Account extends AppCompatActivity
                 INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         //searchView.clearFocus();
+        Toast.makeText(context, "HI",
+                     Toast.LENGTH_SHORT).show();
         //searchView.setQuery("", false);
         return true;
     }
