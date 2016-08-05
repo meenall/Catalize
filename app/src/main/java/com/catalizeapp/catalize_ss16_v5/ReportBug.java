@@ -27,8 +27,6 @@ public class ReportBug extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_bug);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
-
         sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
 
         //Intent intent = getIntent();
@@ -54,10 +52,7 @@ public class ReportBug extends AppCompatActivity {
                     AlertDialog.Builder alertDialogBuilder = new
                             AlertDialog.Builder(ReportBug.this);
                     AlertDialog dialog = alertDialogBuilder.create();
-
-
                     dialog.setMessage(e.getMessage());
-
 
                     dialog.show();
 

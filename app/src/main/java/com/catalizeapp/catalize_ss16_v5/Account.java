@@ -38,8 +38,7 @@ import android.widget.Toast;
 import android.content.pm.PackageManager;
 
 
-public class Account extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Account extends AppCompatActivity {
 
     boolean cancel = false;
     Context context = null;
@@ -53,12 +52,12 @@ public class Account extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav2);
         //setContentView(R.layout.intro);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         if( getIntent().getBooleanExtra("Exit me", false)){
             finish();
@@ -266,14 +265,6 @@ public class Account extends AppCompatActivity
             //}
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(Account.this);
     }
 
     public void onRequestPermissionsResult(int requestCode,
@@ -332,8 +323,8 @@ public class Account extends AppCompatActivity
             Intent intentReportBug = new Intent(Account.this, ReportBug.class); //
             startActivity(intentReportBug);
         } else if (id == R.id.settings) {
-            //Intent change = new Intent(Nav.this, Contacts.class);
-            //startActivity(change);
+            Intent intentSettings = new Intent(Account.this, SettingsActivity.class);
+            startActivity(intentSettings);
         } else if (id == R.id.contacts) {
             Intent change = new Intent(Account.this, Nav.class);
             startActivity(change);

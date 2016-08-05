@@ -53,9 +53,13 @@
         </activity>
         <activity
             android:name=".Account"
+            android:label="Introduction"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="adjustPan|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Nav" />
+        </activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"

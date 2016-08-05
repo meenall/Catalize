@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
+    String firstName;
+    String lastName;
+    String personEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +29,19 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
+        final SharedPreferences prefs = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
+
+        firstName = prefs.getString("first_name","");
+        lastName = prefs.getString("last_name","");
+        personEmail  = prefs.getString("email", "");
 
         final EditText firstNameEdited = (EditText) findViewById(R.id.first_name_edit);
         final EditText lastNameEdited = (EditText) findViewById(R.id.last_name_edit);
         final EditText emailEdited = (EditText) findViewById(R.id.email_edit);
 
-        final SharedPreferences prefs = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
+        firstNameEdited.setHint(firstName);
+        lastNameEdited.setHint(lastName);
+        emailEdited.setHint(personEmail);
 
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View view) {
