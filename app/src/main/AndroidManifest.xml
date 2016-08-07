@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
@@ -43,6 +44,14 @@
                 android:value=".LoginActivity" />
         </activity>
         <activity
+            android:name=".Log"
+            android:label="Activity Log"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Nav" />
+        </activity>
+        <activity
             android:name=".ReportBug"
             android:label="Catalize"
             android:screenOrientation="portrait"
@@ -69,6 +78,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Nav" />
         </activity>
+        <activity
+            android:name=".PagerActivity"
+            android:label="@string/title_activity_pager"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

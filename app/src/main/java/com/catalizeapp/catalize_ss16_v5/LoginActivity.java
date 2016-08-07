@@ -47,6 +47,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.catalizeapp.catalize_ss16_v5.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +90,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Utils.saveSharedSetting(LoginActivity.this, Nav.PREF_USER_FIRST_TIME, "true");
+
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         super.onCreate(savedInstanceState);
 

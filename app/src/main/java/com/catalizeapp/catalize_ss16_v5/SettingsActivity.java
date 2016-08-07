@@ -151,8 +151,8 @@ public class SettingsActivity extends AppCompatActivity {
             SharedPreferences.Editor e = prefs.edit();
             e.putString("pic", picturePath);
             e.commit();
-            Toast.makeText(context, prefs.getString("pic",""),
-                    Toast.LENGTH_SHORT).show();
+           // Toast.makeText(context, prefs.getString("pic",""),
+             //       Toast.LENGTH_SHORT).show();
             cursor.close();
             //edit.putString(picturePath,"/sdcard/imh.jpeg");
             Glide.with(context).load(picturePath).into(imageView);

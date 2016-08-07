@@ -67,6 +67,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.ContentResolver;
+
+import com.catalizeapp.catalize_ss16_v5.utils.Utils;
+
 /**
  * Main screen - displays contact list.
  * Asks for contact permission.
@@ -95,6 +98,8 @@ public class Nav extends AppCompatActivity
     private String firstName;
     private String lastName;
     private String personEmail;
+    public static final String PREF_USER_FIRST_TIME = "user_first_time";
+    boolean isUserFirstTime;
 
     protected void onCreate(Bundle savedInstanceState) {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -104,6 +109,12 @@ public class Nav extends AppCompatActivity
         }
         super.onCreate(savedInstanceState);
         context = this;
+
+        isUserFirstTime = Boolean.valueOf(Utils.readSharedSetting(Nav.this, PREF_USER_FIRST_TIME, "true"));
+        Intent introIntent = new Intent(Nav.this, PagerActivity.class);
+        introIntent.putExtra(PREF_USER_FIRST_TIME, isUserFirstTime);
+        if (isUserFirstTime)
+            startActivity(introIntent);
 
         setContentView(R.layout.activity_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -137,7 +148,8 @@ public class Nav extends AppCompatActivity
                     //searchView.clearFocus();
                     //searchView.setQuery("", false);
                 }
-                //startActivityForResult(new Intent(Nav.this, Account.class), 10);
+                //startActivityForResult(new Intent(Nav.this, PagerActivity.class), 10);
+
                 searchView.clearFocus();
                 searchView.setQuery("", false);
                 getSelectedContacts();
@@ -533,7 +545,7 @@ public class Nav extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         //if (id == findViewById(R.id.menu_search).getId()) {
-            //btnOK = (Button) findViewById(R.id.include).findViewById(R.id.include).findViewById(R.id.connect);
+        //btnOK = (Button) findViewById(R.id.include).findViewById(R.id.include).findViewById(R.id.connect);
         //    return true;
         //}
 
@@ -554,6 +566,9 @@ public class Nav extends AppCompatActivity
             startActivity(intentSettings);
         } else if (id == R.id.contacts) {
             Intent change = new Intent(Nav.this, Nav.class);
+            startActivity(change);
+        } else if (id == R.id.log) {
+            Intent change = new Intent(Nav.this, com.catalizeapp.catalize_ss16_v5.Log.class);
             startActivity(change);
         } else if (id == R.id.log_out) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
