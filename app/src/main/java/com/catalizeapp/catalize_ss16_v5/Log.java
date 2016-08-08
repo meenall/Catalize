@@ -5,6 +5,7 @@
 package com.catalizeapp.catalize_ss16_v5;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,5 +21,11 @@ public class Log extends AppCompatActivity {
         setContentView(R.layout.log);
         sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intentReportBug = new Intent(Log.this, Nav.class); //
+        startActivity(intentReportBug);
     }
 }

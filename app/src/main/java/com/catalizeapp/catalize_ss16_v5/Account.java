@@ -355,4 +355,10 @@ public class Account extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intentReportBug = new Intent(Account.this, Nav.class); //
+        startActivity(intentReportBug);
+    }
+
 }

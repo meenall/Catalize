@@ -243,15 +243,23 @@ public class PagerActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_pager, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            TextView textView2 = (TextView) rootView.findViewById(R.id.section);
+            if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
+                textView.setText("Start making an introduction");
+                textView2.setText("Select one or two contacts to introduce and hit 'Make An Introduction'.");
+            } else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
+                textView.setText("Write your introduction");
+                textView2.setText("Give some context for the introduction. Both contacts will receive the introduction without having to exchange contact information.");
+            } else if (getArguments().getInt(ARG_SECTION_NUMBER) == 3) {
+                textView.setText("Check the status of your introduction");
+                textView2.setText("See your introductions status under the 'Activity log' section");
+            }
 
             img = (ImageView) rootView.findViewById(R.id.section_img);
             img.setBackgroundResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
 
-
             return rootView;
         }
-
 
     }
 
@@ -284,11 +292,11 @@ public class PagerActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Start making an introduction";
                 case 1:
-                    return "SECTION 2";
+                    return "Write your introduction";
                 case 2:
-                    return "SECTION 3";
+                    return "Check the status of your introduction";
             }
             return null;
         }

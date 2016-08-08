@@ -61,4 +61,9 @@ public class ReportBug extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        Intent intentReportBug = new Intent(ReportBug.this, Nav.class); //
+        startActivity(intentReportBug);
+    }
 }

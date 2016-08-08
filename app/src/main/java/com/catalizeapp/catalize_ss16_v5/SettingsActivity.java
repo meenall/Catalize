@@ -158,5 +158,11 @@ public class SettingsActivity extends AppCompatActivity {
             Glide.with(context).load(picturePath).into(imageView);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intentReportBug = new Intent(SettingsActivity.this, Nav.class); //
+        startActivity(intentReportBug);
+    }
 }
 
