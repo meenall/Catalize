@@ -98,9 +98,9 @@ public class PagerActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(page);
         updateIndicators(page);
 
-        final int color1 = ContextCompat.getColor(this, R.color.cyan);
-        final int color2 = ContextCompat.getColor(this, R.color.orange);
-        final int color3 = ContextCompat.getColor(this, R.color.green);
+        final int color1 = ContextCompat.getColor(this, R.color.colorPrimary);
+        final int color2 = ContextCompat.getColor(this, R.color.pink);
+        final int color3 = ContextCompat.getColor(this, R.color.light_green);
 
         final int[] colorList = new int[]{color1, color2, color3};
 
