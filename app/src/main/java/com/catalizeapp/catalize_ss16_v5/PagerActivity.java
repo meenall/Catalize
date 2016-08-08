@@ -98,7 +98,7 @@ public class PagerActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(page);
         updateIndicators(page);
 
-        final int color1 = ContextCompat.getColor(this, R.color.colorPrimary);
+        final int color1 = ContextCompat.getColor(this, R.color.colorPrimaryDark);
         final int color2 = ContextCompat.getColor(this, R.color.pink);
         final int color3 = ContextCompat.getColor(this, R.color.light_green);
 
@@ -221,7 +221,7 @@ public class PagerActivity extends AppCompatActivity {
 
         ImageView img;
 
-        int[] bgs = new int[]{R.drawable.onboarding_1, R.drawable.onboarding_2, R.drawable.onboarding_3};
+        int[] bgs = new int[]{R.drawable.contacts, R.drawable.intro, R.drawable.log};
 
         public PlaceholderFragment() {
         }

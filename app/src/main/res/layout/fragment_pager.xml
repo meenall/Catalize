@@ -11,12 +11,11 @@
 
         <ImageView
             android:id="@+id/section_img"
-            android:layout_width="192dp"
-            android:layout_height="192dp"
-            android:layout_gravity="center"
+            android:layout_width="250dp"
+            android:layout_height="390dp"
+            android:layout_gravity="top|center"
             android:adjustViewBounds="true"
-            android:alpha="0.30"
-            android:background="@drawable/white_logo"
+            android:background="@drawable/contacts"
             android:scaleType="fitCenter" />
 
 
