@@ -221,7 +221,7 @@ public class PagerActivity extends AppCompatActivity {
 
         ImageView img;
 
-        int[] bgs = new int[]{R.drawable.user, R.drawable.user, R.drawable.user};
+        int[] bgs = new int[]{R.drawable.onboarding_1, R.drawable.onboarding_2, R.drawable.onboarding_3};
 
         public PlaceholderFragment() {
         }
