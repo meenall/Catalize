@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "970776057421",
+    "firebase_url": "https://catalize-1470601187382.firebaseio.com",
+    "project_id": "catalize-1470601187382",
+    "storage_bucket": "catalize-1470601187382.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970776057421:android:e89cf43a5e9c5e1f",
+        "android_client_info": {
+          "package_name": "com.catalizeapp.catalize_ss16_v5"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970776057421-7g4shoio7l5cepk6gfmajk6s0jrgelt8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAAatpJJn0oi-gtw8w6TlDnwMnBZfNRk4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

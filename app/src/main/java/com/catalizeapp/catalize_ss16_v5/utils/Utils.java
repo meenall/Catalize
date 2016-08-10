@@ -21,10 +21,10 @@ public class Utils {
         return height;
     }
 
-    public static int getStatusBarHeight(Context context) {
-        int height = (int) context.getResources().getDimension(R.dimen.statusbar_size);
-        return height;
-    }
+//    public static int getStatusBarHeight(Context context) {
+//        int height = (int) context.getResources().getDimension(R.dimen.statusbar_size);
+//        return height;
+//    }
 
 
     public static Drawable tintMyDrawable(Drawable drawable, int color) {
