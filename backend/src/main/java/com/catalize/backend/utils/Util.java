@@ -366,15 +366,14 @@ public class Util {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                Introduction itroduction = null;
+                Introduction intro = null;
                 String name = "Introduction";
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                    itroduction = messageSnapshot.getValue(Introduction.class);
+                    intro = messageSnapshot.getValue(Introduction.class);
                 }
-                if (itroduction == null) {
+                if (intro == null) {
                     return;
                 }
-                final Introduction intro = itroduction;
 
                 if (intro.isComplete()) {
                     if (intro.aContact.equals(email)) {
@@ -404,36 +403,6 @@ public class Util {
 
             }
         };
-//        introRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-//                    Introduction intro = snapshot.getValue(Introduction.class);
-//                    if(intro.email.contains(acceptCode)){
-//                        if (intro.isComplete()) {
-//                            if (intro.aContact.equals(email)) {
-//                                chat(intro, intro.bContact + " said: " + reply, true);
-//
-//                            } else if (intro.bContact.equals(email)) {
-//                                chat(intro, intro.aContact + " said: " + reply, false);
-//
-//                            }
-//                        } else {
-//                            try {
-//                                alertContact(intro, email, reply);
-//                            } catch (ServletException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
 
         introRef.orderByChild("email").equalTo(acceptCode).limitToFirst(1).addListenerForSingleValueEvent(listener);
 

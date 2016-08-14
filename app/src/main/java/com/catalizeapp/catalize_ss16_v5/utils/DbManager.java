@@ -44,12 +44,12 @@ public class DbManager {
         introRef.child(intro.getUid()).setValue(intro);
 
     }
-    public    void addUser(User user){
+    public    void addUser(final  User user){
         userRef.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if(user == null){
+                User temp = dataSnapshot.getValue(User.class);
+                if(temp == null){
                     userRef.child(user.getUid()).setValue(user);
 
                 }

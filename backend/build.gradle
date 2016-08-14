@@ -30,6 +30,7 @@ dependencies {
   compile 'javax.servlet:servlet-api:2.5'
     compile 'com.google.firebase:firebase-server-sdk:[3.0.0,)'
     compile 'com.twilio.sdk:twilio-java-sdk:4.4.5'
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.9.2'
 
     compile 'com.google.appengine:appengine-endpoints:1.9.34'
     compile 'com.google.appengine:appengine-endpoints-deps:1.9.34'
