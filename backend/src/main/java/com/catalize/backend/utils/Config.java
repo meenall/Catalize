@@ -3,6 +3,8 @@ package com.catalize.backend.utils;
 public class Config {
     public final  static String TWILIO_ACCOUNT_SID =System.getProperty("TWILIO_ACCOUNT_SID");
     public final  static String TWILIO_AUTH_TOKEN =System.getProperty("TWILIO_AUTH_TOKEN");
+    public final  static String SEND_GRID_USER =System.getProperty("SEND_GRID_USER");
+    public final  static String SEND_GRID_PASSWORD =System.getProperty("SEND_GRID_PASSWORD");
     public final static  int MAX_NUMBERS = 10;
     public final  static String ERROR_EMAIL = "marcus.johnson226@gmail.com";
     public final  static String EMAIL = "@catalize-1470601187382.appspotmail.com";

@@ -305,9 +305,9 @@ public class Account extends AppCompatActivity {
                         // options for running against local devappserver
                         // - 10.0.2.2 is localhost's IP address in Android emulator
                         // - turn off compression when running against local devappserver
-                        .setRootUrl("https://catalize-1470601187382.appspot.com/_ah/api/")
+//                        .setRootUrl("https://catalize-1470601187382.appspot.com/_ah/api/")
 
-//                        .setRootUrl("http://192.168.1.64:49823/_ah/api/")
+                        .setRootUrl("http://192.168.1.64:53582/_ah/api/")
                         .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                             @Override
                             public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {

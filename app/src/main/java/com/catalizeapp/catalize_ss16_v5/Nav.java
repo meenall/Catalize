@@ -50,6 +50,7 @@ import android.widget.Toast;
 
 import com.catalizeapp.catalize_ss16_v5.ui.login.FireLoginActivity;
 import com.catalizeapp.catalize_ss16_v5.utils.Utils;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -87,12 +88,16 @@ public class Nav extends AppCompatActivity
     RelativeLayout rlPBContainer = null;
     private SharedPreferences sharedPreferences;
     public static final String PREF_USER_FIRST_TIME = "user_first_time";
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     boolean isUserFirstTime;
 
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_nav);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         if( getIntent().getBooleanExtra("Exit me", false)) {
             finish();
             return; // add this to prevent from doing unnecessary stuffs
@@ -105,7 +110,7 @@ public class Nav extends AppCompatActivity
         introIntent.putExtra(PREF_USER_FIRST_TIME, isUserFirstTime);
         if(isUserFirstTime){
             startActivity(introIntent);
-            
+
         }
 
 

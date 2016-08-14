@@ -16,6 +16,8 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="web_client_id" translatable="false">970776057421-7g4shoio7l5cepk6gfmajk6s0jrgelt8.apps.googleusercontent.com	</string>
 
+    <string name="searchable"> Search </string>
+    <string name="menu_search">Search</string>
 
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password </string>

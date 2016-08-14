@@ -24,23 +24,12 @@ import com.twilio.sdk.resource.list.IncomingPhoneNumberList;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Logger;
 
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.servlet.ServletException;
 
 /**
@@ -68,36 +57,43 @@ public class Util {
     }
 
     public static void sendEmail(String aContact, String aBody, String aName, String subject, String email) {
-        Properties props = new Properties();
-        Session session = Session.getDefaultInstance(props, null);
+        Sendgrid mail = new Sendgrid(Config.SEND_GRID_USER,Config.SEND_GRID_PASSWORD);
 
-        try {
-            MimeMessage msg = new MimeMessage(session);
-            msg.setSubject(subject);
-            msg.setFrom(new InternetAddress(email, "Catalize Admin"));
+// set email data
+        mail.setTo(aContact).setFrom(email).setSubject(subject).setText(aBody);
 
-            msg.addRecipient(javax.mail.Message.RecipientType.TO,
-                    new InternetAddress(aContact, aName));
-            Multipart mp = new MimeMultipart();
-
-            MimeBodyPart htmlPart = new MimeBodyPart();
-            htmlPart.setContent(aBody, "text/plain");
-            mp.addBodyPart(htmlPart);
-            msg.setContent(mp);
-            Transport.send(msg);
-            logger.info("Email sent");
-        } catch (AddressException e) {
-            logger.info("Error : " + e.getLocalizedMessage());
-            // ...
-        } catch (MessagingException e) {
-            logger.info("Error : " + e.getLocalizedMessage());
-
-            // ...
-        } catch (UnsupportedEncodingException e) {
-            // ...
-            logger.info("Error : " + e.getLocalizedMessage());
-
-        }
+// send your message
+        mail.send();
+//        Properties props = new Properties();
+//        Session session = Session.getDefaultInstance(props, null);
+//
+//        try {
+//            MimeMessage msg = new MimeMessage(session);
+//            msg.setSubject(subject);
+//            msg.setFrom(new InternetAddress(email, "Catalize Admin"));
+//
+//            msg.addRecipient(javax.mail.Message.RecipientType.TO,
+//                    new InternetAddress(aContact, aName));
+//            Multipart mp = new MimeMultipart();
+//
+//            MimeBodyPart htmlPart = new MimeBodyPart();
+//            htmlPart.setContent(aBody, "text/plain");
+//            mp.addBodyPart(htmlPart);
+//            msg.setContent(mp);
+//            Transport.send(msg);
+//            logger.info("Email sent");
+//        } catch (AddressException e) {
+//            logger.info("Error : " + e.getLocalizedMessage());
+//            // ...
+//        } catch (MessagingException e) {
+//            logger.info("Error : " + e.getLocalizedMessage());
+//
+//            // ...
+//        } catch (UnsupportedEncodingException e) {
+//            // ...
+//            logger.info("Error : " + e.getLocalizedMessage());
+//
+//        }
     }
 
     public static void sendSMS(String aContact, String aBody, String phone) throws ServletException {
@@ -363,35 +359,39 @@ public class Util {
         }
     }
 
-    public static  void processEmailResponse(String acceptCode, final  String reply , final String email) {
-        introRef.orderByChild("email").equalTo(acceptCode).addListenerForSingleValueEvent(new ValueEventListener() {
+    public static  void processEmailResponse(final String acceptCode, final  String reply , final String email) {
+        ValueEventListener listener = new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+
                 Introduction itroduction = null;
                 String name = "Introduction";
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                     itroduction = messageSnapshot.getValue(Introduction.class);
                 }
-                if(itroduction == null){
+                if (itroduction == null) {
                     return;
                 }
                 final Introduction intro = itroduction;
 
-                if(intro.isComplete()){
-                    if(intro.aContact.equals(email)){
-                        chat(intro, intro.bContact+" said: "+reply, true);
+                if (intro.isComplete()) {
+                    if (intro.aContact.equals(email)) {
+                        chat(intro, intro.bContact + " said: " + reply, true);
+
+                    } else if (intro.bContact.equals(email)) {
+                        chat(intro, intro.aContact + " said: " + reply, false);
 
                     }
-                    else  if(intro.bContact.equals(email)){
-                        chat(intro, intro.aContact+" said: "+reply, false);
-
+                } else {
+                    try {
+                        alertContact(intro, email, reply);
+                    } catch (ServletException e) {
+                        e.printStackTrace();
                     }
                 }
-                try {
-                    alertContact(intro,email,reply);
-                } catch (ServletException e) {
-                    e.printStackTrace();
-                }
+
 
 
             }
@@ -403,7 +403,39 @@ public class Util {
                 logger.warning("Db error" + databaseError.getDetails());
 
             }
-        });
+        };
+//        introRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+//                    Introduction intro = snapshot.getValue(Introduction.class);
+//                    if(intro.email.contains(acceptCode)){
+//                        if (intro.isComplete()) {
+//                            if (intro.aContact.equals(email)) {
+//                                chat(intro, intro.bContact + " said: " + reply, true);
+//
+//                            } else if (intro.bContact.equals(email)) {
+//                                chat(intro, intro.aContact + " said: " + reply, false);
+//
+//                            }
+//                        } else {
+//                            try {
+//                                alertContact(intro, email, reply);
+//                            } catch (ServletException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
+        introRef.orderByChild("email").equalTo(acceptCode).limitToFirst(1).addListenerForSingleValueEvent(listener);
 
     }
 

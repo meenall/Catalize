@@ -2,6 +2,8 @@ package com.catalize.backend.endpoints;
 
 import com.catalize.backend.model.Introduction;
 import com.catalize.backend.model.User;
+import com.catalize.backend.utils.Config;
+import com.catalize.backend.utils.Sendgrid;
 import com.catalize.backend.utils.Util;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -103,6 +105,19 @@ public class IntroductionEndpoint {
         setupIntro(introduction);
 
         return introduction;
+    }
+    @ApiMethod(name = "sgTest",
+            path = "test/sendGrid")
+    public void sgTest() {
+        // TODO: Implement this function
+        logger.info("Calling email method");
+        Sendgrid mail = new Sendgrid(Config.SEND_GRID_USER,Config.SEND_GRID_PASSWORD);
+
+// set email data
+        mail.setTo("marcus.johnson226@gmail.com").setFrom("admin"+Config.EMAIL).setSubject("Test Subject").setText("Test  body");
+
+// send your message
+        mail.send();
     }
     @ApiMethod(name = "bothText",
             path = "test/both")
