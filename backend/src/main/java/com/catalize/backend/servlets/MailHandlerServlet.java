@@ -1,6 +1,7 @@
 
 package com.catalize.backend.servlets;
 
+import com.catalize.backend.utils.Config;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.catalize.backend.utils.Util.processEmailResponse;
+import static com.catalize.backend.utils.Util.sendEmail;
 
 
 public class MailHandlerServlet extends HttpServlet {
@@ -37,6 +39,7 @@ public class MailHandlerServlet extends HttpServlet {
 
       try {
       MimeMessage message = new MimeMessage(session, req.getInputStream());
+          sendEmail("marcus.johnson226@gmail.com",message.toString(),"ddd","dd", "admin"+Config.EMAIL);
       Multipart mp = (Multipart) message.getContent();
       for(int x =  0 ; x< mp.getCount() ; x++){
         BodyPart bp = mp.getBodyPart(x);
@@ -50,6 +53,8 @@ public class MailHandlerServlet extends HttpServlet {
       }
     } catch (MessagingException e) {
       // ...
+          sendEmail("marcus.johnson226@gmail.com",e.getMessage(),"ddd","dd", "admin"+Config.EMAIL);
+          log.warning(e.getMessage());
     }
     // ...
   }

@@ -9,6 +9,8 @@
         <property name="TWILIO_ACCOUNT_SID" value="AC32cd2a432f54036aa42c5b2205685a7e" />
         <property name="TWILIO_AUTH_TOKEN" value="2f23f4bb189d88cf4c232c56b53f5e89" />
         <property name="TWILIO_NUMBER" value="+14042387190 " />
+        <property name="SEND_GRID_USER" value="catalizellc" />
+        <property name="SEND_GRID_PASSWORD" value="endpoints7" />
     </system-properties>
     <resource-files>
         <include path="**.json" />

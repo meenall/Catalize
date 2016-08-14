@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/CNcJWlEtYGXPx2WhUU7byERJsp0\"",
+ "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/QifdEpMWCGbYB9aqE4QcAn3kGbw\"",
  "discoveryVersion": "v1",
  "id": "introductionApi:v1",
  "name": "introductionApi",
@@ -181,6 +181,12 @@
    "returns": {
     "$ref": "Introduction"
    },
+   "scopes": [
+    "https://www.googleapis.com/auth/userinfo.email"
+   ]
+  },
+  "introductionApi.sgTest": {
+   "id": "introductionApi.sgTest",
    "scopes": [
     "https://www.googleapis.com/auth/userinfo.email"
    ]
