@@ -6,15 +6,22 @@ import com.catalize.backend.utils.Util;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.inject.Named;
+import javax.servlet.ServletException;
+
+import static com.catalize.backend.utils.Util.sendIntroduction;
 
 /**
  * An endpoint class we are exposing
@@ -114,17 +121,34 @@ public class IntroductionEndpoint {
         return introduction;
     }
 
+
+
     private void setupIntro(final Introduction introduction) {
         userRef.child(introduction.introducerId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                if(user.introductions == null){
+                    user.introductions  =  0;
+                }
                 user.introductions ++;
-                userRef.child(user.uid).setValue(user);
+
+
+
+                if(user.introList == null || user.introList.size() == 0){
+                    user.introList = new ArrayList<String>();
+                }
+                user.introList.add(introduction.uid);
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("introductions",user.introductions);
+                map.put("introList",user.introList);
+                userRef.child(user.uid).updateChildren(map);
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                logger.warning(databaseError.getMessage());
 
             }
         });
@@ -145,16 +169,50 @@ public class IntroductionEndpoint {
 
         }
         introduction.acceptCode = introduction.uid.substring(0,4);
-        ref.child(introduction.uid).setValue(introduction, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if(databaseError == null){
-                    Util.findNumber(introduction);
-                }
-            }
-        });
+        //ref.orderByChild("active").equalTo(false).addChildEventListener(listener);
+        Util.findNumber(introduction);
+
 
     }
+    private final ChildEventListener listener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+            Introduction intro = dataSnapshot.getValue(Introduction.class);
+            logger.info("Introduction added: " + intro.toString());
+            System.out.println("Introduction added: " + intro.toString());
+            if(intro !=null){
+                if(intro.expired==false && intro.active == false){
+
+                    try {
+                        sendIntroduction(intro);
+                    } catch (ServletException e) {
+                        e.printStackTrace();
+                    }
 
 
+                }
+            }
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String prevChildKey) {
+            //Phone number added. send message
+            Introduction intro = dataSnapshot.getValue(Introduction.class);
+
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            logger.warning(databaseError.getMessage());
+
+        }
+    };
 }

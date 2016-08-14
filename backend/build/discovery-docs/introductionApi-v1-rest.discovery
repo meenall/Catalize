@@ -1,6 +1,6 @@
 {
  "kind": "discovery#restDescription",
- "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/FKLVTUcTNq5KMjS_Ao5apQigrXY\"",
+ "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/CNcJWlEtYGXPx2WhUU7byERJsp0\"",
  "discoveryVersion": "v1",
  "id": "introductionApi:v1",
  "name": "introductionApi",
@@ -111,6 +111,9 @@
      "type": "boolean"
     },
     "date": {
+     "type": "string"
+    },
+    "email": {
      "type": "string"
     },
     "expired": {

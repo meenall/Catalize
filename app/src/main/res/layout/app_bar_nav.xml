@@ -22,7 +22,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/include2"
         layout="@layout/content_nav" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -34,7 +34,7 @@ public class BounceHandlerServlet extends HttpServlet {
       // bounce.getNotification().getText() 
       // ...
       String body = "notificatoin: " + bounce.getNotification().getText();
-      sendEmail(Config.ERROR_EMAIL,body,"Marcus","Error");
+      sendEmail(Config.ERROR_EMAIL,body,"Marcus","Error","admin"+Config.EMAIL);
     } catch (MessagingException e) {
 
     }

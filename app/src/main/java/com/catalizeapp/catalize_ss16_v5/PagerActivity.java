@@ -161,6 +161,7 @@ public class PagerActivity extends AppCompatActivity {
         mSkipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.saveSharedSetting(PagerActivity.this, Nav.PREF_USER_FIRST_TIME, "false");
 
                 finish();
             }

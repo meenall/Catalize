@@ -6,7 +6,6 @@
 
 package com.catalizeapp.catalize_ss16_v5;
 
-import android.*;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.SearchManager;
@@ -15,10 +14,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -26,25 +25,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Locale;
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.database.Cursor;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,19 +38,27 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.ContentResolver;
 
+import com.catalizeapp.catalize_ss16_v5.ui.login.FireLoginActivity;
 import com.catalizeapp.catalize_ss16_v5.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
+
+
 
 /**
  * Main screen - displays contact list.
@@ -88,6 +78,7 @@ public class Nav extends AppCompatActivity
     public TextView displayEmail;
     boolean flag = false;
     public static boolean newbie = false;
+    private  ImageView profileImage;
     ContactsAdapter objAdapter;
     SearchView searchView;
     ListView lv = null;
@@ -95,13 +86,12 @@ public class Nav extends AppCompatActivity
     Button btnOK = null;
     RelativeLayout rlPBContainer = null;
     private SharedPreferences sharedPreferences;
-    private String firstName;
-    private String lastName;
-    private String personEmail;
     public static final String PREF_USER_FIRST_TIME = "user_first_time";
+
     boolean isUserFirstTime;
 
     protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_nav);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         if( getIntent().getBooleanExtra("Exit me", false)) {
             finish();
@@ -113,28 +103,40 @@ public class Nav extends AppCompatActivity
         isUserFirstTime = Boolean.valueOf(Utils.readSharedSetting(Nav.this, PREF_USER_FIRST_TIME, "true"));
         Intent introIntent = new Intent(Nav.this, PagerActivity.class);
         introIntent.putExtra(PREF_USER_FIRST_TIME, isUserFirstTime);
-        if (isUserFirstTime)
+        if(isUserFirstTime){
             startActivity(introIntent);
+            
+        }
 
-        setContentView(R.layout.activity_nav);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
-        firstName = sharedPreferences.getString("first_name", "");
-        lastName = sharedPreferences.getString("last_name", "");
-        personEmail = sharedPreferences.getString("email", "");
         NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
         View header = LayoutInflater.from(this).inflate(R.layout.nav_header_nav, null);
-        navView.addHeaderView(header);
+       navView.addHeaderView(header);
         displayName = (TextView) header.findViewById(R.id.textViewPerson);
-        displayEmail = (TextView) header.findViewById(R.id.textViewEmail);
-        displayName.setText(firstName + " " + lastName);
-        displayEmail.setText(personEmail);
+        displayEmail  = (TextView) header.findViewById(R.id.textViewEmail);
+        profileImage  = (ImageView) header.findViewById(R.id.profileImage);
+
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        displayEmail.setText(user.getEmail());
+        displayName.setText(user.getDisplayName());
+
+        if(user.getPhotoUrl()!= null){
+            Picasso.with(getApplicationContext())
+                    .load(user.getPhotoUrl())
+                    .placeholder(R.drawable.profile)
+                    .error(R.drawable.profile)
+                    .into(profileImage);
+        }
+
 
 
         rlPBContainer = (RelativeLayout) findViewById(R.id.pbcontainer);
         llContainer = (LinearLayout) findViewById(R.id.data_container);
-        btnOK = (Button) findViewById(R.id.include).findViewById(R.id.include).findViewById(R.id.connect);
+        btnOK = (Button) findViewById(R.id.connect);
         btnOK.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -571,13 +573,12 @@ public class Nav extends AppCompatActivity
             Intent change = new Intent(Nav.this, com.catalizeapp.catalize_ss16_v5.Log.class);
             startActivity(change);
         } else if (id == R.id.log_out) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.commit();
-            Intent intent = new Intent(Nav.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, FireLoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -596,11 +597,7 @@ public class Nav extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        firstName = sharedPreferences.getString("first_name", "");
-        lastName = sharedPreferences.getString("last_name", "");
-        personEmail = sharedPreferences.getString("email", "");
-        displayName.setText(firstName + " " + lastName);
-        displayEmail.setText(personEmail);
+
 
     }
 

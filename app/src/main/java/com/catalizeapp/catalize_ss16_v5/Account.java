@@ -6,24 +6,20 @@
 package com.catalizeapp.catalize_ss16_v5;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.app.AlertDialog;
 import android.content.pm.PackageManager;
-import android.provider.Telephony;
-import android.support.design.widget.NavigationView;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -35,7 +31,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.pm.PackageManager;
+
+import com.catalize.backend.model.introductionApi.IntroductionApi;
+import com.catalize.backend.model.introductionApi.model.Introduction;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.IOException;
+import java.util.UUID;
 
 
 public class Account extends AppCompatActivity {
@@ -49,6 +55,7 @@ public class Account extends AppCompatActivity {
     private String firstName;
     private String lastName;
     private String personEmail;
+    private IntroductionApi myApiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,8 +196,12 @@ public class Account extends AppCompatActivity {
         }
         final Intent sendIntent = new Intent(Intent.ACTION_VIEW);
         //final EditText et= (EditText)findViewById(R.id.prompt);
-        Nav.number2 = Nav.number2.replaceAll("[^0-9]","");
-        Nav.number1 = Nav.number1.replaceAll("[^0-9]","");
+
+        //Breaks email as a contact
+       // Nav.number2 = Nav.number2.replaceAll("[^0-9]","");
+       // Nav.number1 = Nav.number1.replaceAll("[^0-9]","");
+
+
         //people.setText(Contacts.people);
 
         //Toast.makeText(context, Contacts.numbers,
@@ -202,26 +213,38 @@ public class Account extends AppCompatActivity {
         firstName = sharedPreferences.getString("first_name","");
         lastName = sharedPreferences.getString("last_name","");
 
+
         personEmail  = sharedPreferences.getString("email", "");
         send.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+                Introduction intro = new Introduction();
+                intro.setUid(UUID.randomUUID().toString());
+                intro.setAContact(Nav.number1);
+                intro.setAName(Nav.person1);
+                intro.setBContact(Nav.number2);
+                intro.setBName(Nav.person2);
+                intro.setIntroducerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                new EndpointsAsyncTask(intro).execute();
+
+//                DbManager.getInstance().addIntroduction(intro);
+
+
                 //try {
                 //Toast.makeText(context, "HI",
                 //      Toast.LENGTH_SHORT).show();
-                SmsManager.getDefault().sendTextMessage("9154719427", null, "Introduction made by: "+ firstName + " " + lastName + " " + personEmail, null, null);
-                SmsManager.getDefault().sendTextMessage("9154719427", null, "1: " + Nav.person1 + ": " + Nav.number1, null, null);
-                SmsManager.getDefault().sendTextMessage("9154719427", null, "2: " + Nav.person2 + ": " + Nav.number2, null, null);
-                SmsManager.getDefault().sendTextMessage("9154719427", null, prompt.getText().toString(), null, null);
-
-                SmsManager.getDefault().sendTextMessage("2013751471", null, "Introduction made by: "+ firstName + " " + lastName + " " + personEmail, null, null);
-                SmsManager.getDefault().sendTextMessage("2013751471", null, "1: " + Nav.person1 + ": " + Nav.number1, null, null);
-                SmsManager.getDefault().sendTextMessage("2013751471", null, "2: " + Nav.person2 + ": " + Nav.number2, null, null);
-                SmsManager.getDefault().sendTextMessage("2013751471", null, prompt.getText().toString(), null, null);
+//                SmsManager.getDefault().sendTextMessage("9154719427", null, "Introduction made by: "+ firstName + " " + lastName + " " + personEmail, null, null);
+//                SmsManager.getDefault().sendTextMessage("9154719427", null, "1: " + Nav.person1 + ": " + Nav.number1, null, null);
+//                SmsManager.getDefault().sendTextMessage("9154719427", null, "2: " + Nav.person2 + ": " + Nav.number2, null, null);
+//                SmsManager.getDefault().sendTextMessage("9154719427", null, prompt.getText().toString(), null, null);
+//
+//                SmsManager.getDefault().sendTextMessage("2013751471", null, "Introduction made by: "+ firstName + " " + lastName + " " + personEmail, null, null);
+//                SmsManager.getDefault().sendTextMessage("2013751471", null, "1: " + Nav.person1 + ": " + Nav.number1, null, null);
+//                SmsManager.getDefault().sendTextMessage("2013751471", null, "2: " + Nav.person2 + ": " + Nav.number2, null, null);
+//                SmsManager.getDefault().sendTextMessage("2013751471", null, prompt.getText().toString(), null, null);
                 //Toast.makeText(context, "Permissions",
                 //      Toast.LENGTH_SHORT).show();
-
                 final Dialog dialog = new Dialog(Account.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //before
 
@@ -265,6 +288,47 @@ public class Account extends AppCompatActivity {
             //}
         });
 
+    }
+    class EndpointsAsyncTask extends AsyncTask {
+        private Introduction introduction;
+
+        public EndpointsAsyncTask(Introduction introduction) {
+            this.introduction = introduction;
+        }
+
+
+        @Override
+        protected Void doInBackground(Object... params) {
+            if (myApiService == null) {  // Only do this once
+                IntroductionApi.Builder builder = new IntroductionApi.Builder(AndroidHttp.newCompatibleTransport(),
+                        new AndroidJsonFactory(), null)
+                        // options for running against local devappserver
+                        // - 10.0.2.2 is localhost's IP address in Android emulator
+                        // - turn off compression when running against local devappserver
+                        .setRootUrl("https://catalize-1470601187382.appspot.com/_ah/api/")
+
+//                        .setRootUrl("http://192.168.1.64:49823/_ah/api/")
+                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                            @Override
+                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
+                                abstractGoogleClientRequest.setDisableGZipContent(true);
+                            }
+                        });
+                // end options for devappserver
+
+                myApiService = builder.build();
+            }
+
+
+            try {
+                myApiService.insertIntroduction(introduction).execute();
+            } catch (IOException e) {
+                android.util.Log.e("Error", e.getMessage());
+                e.getMessage();
+            }
+
+            return null;
+        }
     }
 
     public void onRequestPermissionsResult(int requestCode,

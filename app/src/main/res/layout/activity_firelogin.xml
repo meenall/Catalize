@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="#212120"
+
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="297dp"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="0dp"
+        android:src="@drawable/white_logo"
+        android:paddingBottom="120dp"
+        android:nestedScrollingEnabled="false" />
+
+    <Button
+        android:id="@+id/google_button"
+        style="?android:textAppearanceSmall"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
+        android:textColor="#ffffff"
+        android:textSize="19sp"
+        android:text="Login with Google"
+        android:textStyle="bold"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

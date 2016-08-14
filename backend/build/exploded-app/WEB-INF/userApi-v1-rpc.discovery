@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/PUx4-l74FwJcNbJ2W15jLEiQroA\"",
+ "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/0tHU_IGZC3poO7P9j7LZlsoAa50\"",
  "discoveryVersion": "v1",
  "id": "userApi:v1",
  "name": "userApi",
@@ -75,18 +75,21 @@
    "id": "User",
    "type": "object",
    "properties": {
+    "displayName": {
+     "type": "string"
+    },
     "email": {
      "type": "string"
     },
-    "firstName": {
-     "type": "string"
+    "introList": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
     },
     "introductions": {
      "type": "integer",
      "format": "int32"
-    },
-    "lastName": {
-     "type": "string"
     },
     "phone": {
      "type": "string"

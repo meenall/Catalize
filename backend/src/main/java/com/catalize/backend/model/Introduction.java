@@ -1,5 +1,7 @@
 package com.catalize.backend.model;
 
+import com.catalize.backend.utils.Config;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,6 +13,8 @@ import java.util.UUID;
 public class Introduction {
     public String uid;
     public String phone;
+    public String email;
+
     public String introducerId;
     public String aName;
     public String aContact;
@@ -37,6 +41,8 @@ public class Introduction {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         this.date = df.format(d);
         phone = "phone";
+        int x =uid.lastIndexOf("-")+1;
+        email =uid.substring(x)+ Config.EMAIL;
         expired = false;
     }
 

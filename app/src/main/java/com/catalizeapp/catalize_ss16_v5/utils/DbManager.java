@@ -2,9 +2,11 @@ package com.catalizeapp.catalize_ss16_v5.utils;
 
 import com.catalize.backend.model.introductionApi.model.Introduction;
 import com.catalize.backend.model.userApi.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by Marcus on 7/4/16.
@@ -16,11 +18,9 @@ public class DbManager {
 
 
 
-    static  FirebaseStorage storage = FirebaseStorage.getInstance();
-
-    private  static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static DatabaseReference userRef = database.getReference("user");
-    private static  DatabaseReference introRef = database.getReference("introduction");
+    private   FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private  DatabaseReference userRef = database.getReference("user");
+    private   DatabaseReference introRef = database.getReference("introduction");
 
     private static DbManager singleton = null;
 
@@ -40,14 +40,26 @@ public class DbManager {
         return singleton;
     }
 
-    public  static  void addIntroduction(Introduction introduction){
-        introRef.child(introduction.getUid()).setValue(introduction);
-
+    public    void addIntroduction(Introduction intro){
+        introRef.child(intro.getUid()).setValue(intro);
 
     }
-    public  static  void addUser(User user){
-        userRef.child(user.getUid()).setValue(user);
+    public    void addUser(User user){
+        userRef.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if(user == null){
+                    userRef.child(user.getUid()).setValue(user);
 
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

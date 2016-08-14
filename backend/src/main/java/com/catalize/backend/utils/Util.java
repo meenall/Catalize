@@ -7,6 +7,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.TwilioRestException;
 import com.twilio.sdk.resource.factory.IncomingPhoneNumberFactory;
@@ -28,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -56,27 +57,24 @@ public class Util {
     final static DatabaseReference userRef = database.getReference("user");
 
     public static String formatNumber(String phone) {
-        String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
-
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(phone);
-        //System.out.println(email +" : "+ matcher.matches());
-        //If phone number is correct then format it to (123)-456-7890
-        if (matcher.matches()) {
-            return matcher.replaceFirst("+1$1$2$3");
+        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+        try {
+            Phonenumber.PhoneNumber swissNumberProto = phoneUtil.parse(phone, "US");
+            return phoneUtil.format(swissNumberProto, PhoneNumberUtil.PhoneNumberFormat.E164);
+        } catch (NumberParseException e) {
+            System.err.println("NumberParseException was thrown: " + e.toString());
         }
-
         return phone;
     }
 
-    public static void sendEmail(String aContact, String aBody, String aName, String subject) {
+    public static void sendEmail(String aContact, String aBody, String aName, String subject, String email) {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
 
         try {
             MimeMessage msg = new MimeMessage(session);
             msg.setSubject(subject);
-            msg.setFrom(new InternetAddress(Config.EMAIL, "Catalize Admin"));
+            msg.setFrom(new InternetAddress(email, "Catalize Admin"));
 
             msg.addRecipient(javax.mail.Message.RecipientType.TO,
                     new InternetAddress(aContact, aName));
@@ -127,7 +125,7 @@ public class Util {
                     e.printStackTrace();
                 }
             } else {
-                sendEmail(introduction.bContact, body, introduction.bName, subject);
+                sendEmail(introduction.bContact, body, introduction.bName, subject,introduction.email);
             }
         } else {
             if (introduction.aText) {
@@ -137,7 +135,7 @@ public class Util {
                     e.printStackTrace();
                 }
             } else {
-                sendEmail(introduction.aContact, body, introduction.aName, subject);
+                sendEmail(introduction.aContact, body, introduction.aName, subject,introduction.email);
             }
         }
     }
@@ -149,7 +147,7 @@ public class Util {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
-                    String subject = String.format(Config.EMAIL_SUBJECT, user.firstName + " " + user.lastName, intro.acceptCode);
+                    String subject = String.format(Config.EMAIL_SUBJECT, user.displayName, intro.acceptCode);
 
                     if (user.phone != null && user.phone.length() > 0) {
                         try {
@@ -158,7 +156,7 @@ public class Util {
                             e.printStackTrace();
                         }
                     } else if (user.email != null && user.email.length() > 0) {
-                        sendEmail(user.email, intro.aName + " has been introduced to " + intro.bName, user.firstName, subject);
+                        sendEmail(user.email, intro.aName + " has been introduced to " + intro.bName, user.displayName, subject,intro.email);
                     }
                 }
 
@@ -182,44 +180,62 @@ public class Util {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap map = new HashMap();
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    logger.info("Aviable Number query" + dataSnapshot.getKey());
 
                     Introduction introduction = snap.getValue(Introduction.class);
+                    logger.info("Find Number Loop : Intro: " + introduction.toString());
+
 
                     if (introduction.aContact.contains(intro.aContact)) {
-                        map.put(introduction.uid, introduction.phone);
+                        logger.info("Added number to no list " + intro.phone);
+
+                        map.put(introduction.phone, introduction.phone);
                     }
                     if (introduction.aContact.contains(intro.bContact)) {
-                        map.put(introduction.uid, introduction.phone);
+                        logger.info("Added number to no list " + intro.phone);
+
+                        map.put(introduction.phone, introduction.phone);
                     }
                     if (introduction.bContact.contains(intro.aContact)) {
-                        map.put(introduction.uid, introduction.phone);
+                        logger.info("Added number to no list " + intro.phone);
+
+                        map.put(introduction.phone, introduction.phone);
                     }
                     if (introduction.bContact.contains(intro.bContact)) {
-                        map.put(introduction.uid, introduction.phone);
+                        logger.info("Added number to no list " + intro.phone);
+
+                        map.put(introduction.phone, introduction.phone);
                     }
                 }
                 IncomingPhoneNumberList numbers = client.getAccount().getIncomingPhoneNumbers();
                 List<IncomingPhoneNumber> list = numbers.getPageData();
-                boolean foundNumber = false;
+                boolean buyNumber = true;
                 for (IncomingPhoneNumber number : list) {
+                    logger.info("Looking for owned   number");
+
                     if (map.get(number.getPhoneNumber()) == null) {
+                        logger.info("Found  number " + number.getPhoneNumber());
+
                         intro.phone = number.getPhoneNumber();
                         Map<String, Object> introUpdate = new HashMap<String, Object>();
                         introUpdate.put("phone", intro.phone);
-                        introRef.child(intro.uid).updateChildren(introUpdate);
-                        foundNumber = true;
+//                        introRef.child(intro.uid).updateChildren(introUpdate);
+                        buyNumber = false;
                         break;
                     }
                 }
-                if (!foundNumber) {
+                if (buyNumber) {
+                    logger.info("Buying new number");
                     if (client.getAccount().getIncomingPhoneNumbers().getPageData().size() < Config.MAX_NUMBERS) {
                         intro.phone = buyNumber("678");
-                        Map<String, Object> introUpdate = new HashMap<String, Object>();
-                        introUpdate.put("phone", intro.phone);
-                        introRef.child(intro.uid).updateChildren(introUpdate);
                     }
                 }
+                try {
+                    sendIntroduction(intro);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                }
+
+
 
             }
 
@@ -235,12 +251,12 @@ public class Util {
         if (intro.aText) {
             sendSMS(intro.aContact, Config.EXPIRED_MESSAGE, intro.phone);
         } else {
-            sendEmail(intro.aContact, Config.EXPIRED_MESSAGE, intro.aName, subject);
+            sendEmail(intro.aContact, Config.EXPIRED_MESSAGE, intro.aName, subject,intro.email);
         }
         if (intro.bText) {
             sendSMS(intro.bContact, Config.EXPIRED_MESSAGE, intro.phone);
         } else {
-            sendEmail(intro.bContact, Config.EXPIRED_MESSAGE, intro.aName, subject);
+            sendEmail(intro.bContact, Config.EXPIRED_MESSAGE, intro.aName, subject,intro.email);
 
         }
     }
@@ -279,52 +295,34 @@ public class Util {
     }
 
     private static String buyNumber(Account account, IncomingPhoneNumberFactory phoneNumberFactory, String phoneNumber) {
+       String brought = "";
         try {
             Map<String, String> buyParams = new HashMap<>();
             buyParams.put("PhoneNumber", phoneNumber);
+            buyParams.put("SmsUrl", "http://catalize-1470601187382.appspot.com/sms");
             account.getIncomingPhoneNumberFactory().create(buyParams);
 
             IncomingPhoneNumber number = phoneNumberFactory.create(buyParams);
 
-            return number.getPhoneNumber();
+            brought=  number.getPhoneNumber();
+
 
         } catch (TwilioRestException e) {
             e.printStackTrace();
         }
-        return null;
+        return brought;
     }
 
     public static void sendIntroduction(final Introduction introduction) throws ServletException {
         userRef.child(introduction.introducerId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                String subject = String.format(Config.EMAIL_SUBJECT, user.firstName + " " + user.lastName, introduction.acceptCode);
-                if (introduction.aText) {
-                    try {
-                        String text = String.format(Config.TEXT_MESSAGE1, user.firstName + " " + user.lastName, introduction.bName, introduction.bName);
-                        sendSMS(introduction.aContact, text, introduction.phone);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    String email = String.format(Config.EMAIL_MESSAGE1, user.firstName + " " + user.lastName, introduction.bName, introduction.bName);
-                    sendEmail(introduction.aContact, email, introduction.aName, subject);
-                }
-                if (introduction.bText) {
-                    try {
-                        String text = String.format(Config.TEXT_MESSAGE1, user.firstName + " " + user.lastName, introduction.aName, introduction.aName);
+                final User user = dataSnapshot.getValue(User.class);
 
-                        sendSMS(introduction.bContact, text, introduction.phone);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    }
+                sendMessages(user, introduction);
 
-                } else {
-                    String email = String.format(Config.EMAIL_MESSAGE1, user.firstName + " " + user.lastName, introduction.aName, introduction.aName);
 
-                    sendEmail(introduction.bContact, email, introduction.bName, subject);
-                }
+
             }
 
             @Override
@@ -334,8 +332,39 @@ public class Util {
         });
     }
 
+    private static void sendMessages(User user, Introduction introduction) {
+        introduction.active = true;
+        introRef.child(introduction.uid).setValue(introduction);
+        String subject = String.format(Config.EMAIL_SUBJECT, user.displayName, introduction.acceptCode);
+        if (introduction.aText) {
+            try {
+                String text = String.format(Config.TEXT_MESSAGE1, user.displayName, introduction.bName, introduction.bName);
+                sendSMS(introduction.aContact, text, introduction.phone);
+            } catch (ServletException e) {
+                e.printStackTrace();
+            }
+        } else {
+            String email = String.format(Config.EMAIL_MESSAGE1, user.displayName, introduction.bName, introduction.bName);
+            sendEmail(introduction.aContact, email, introduction.aName, subject,introduction.email);
+        }
+        if (introduction.bText) {
+            try {
+                String text = String.format(Config.TEXT_MESSAGE1, user.displayName, introduction.aName, introduction.aName);
+
+                sendSMS(introduction.bContact, text, introduction.phone);
+            } catch (ServletException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            String email = String.format(Config.EMAIL_MESSAGE1, user.displayName, introduction.aName, introduction.aName);
+
+            sendEmail(introduction.bContact, email, introduction.bName, subject,introduction.email);
+        }
+    }
+
     public static  void processEmailResponse(String acceptCode, final  String reply , final String email) {
-        introRef.orderByChild("acceptCode").equalTo(acceptCode).addListenerForSingleValueEvent(new ValueEventListener() {
+        introRef.orderByChild("email").equalTo(acceptCode).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Introduction itroduction = null;
@@ -343,28 +372,31 @@ public class Util {
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                     itroduction = messageSnapshot.getValue(Introduction.class);
                 }
-
+                if(itroduction == null){
+                    return;
+                }
                 final Introduction intro = itroduction;
-                String subject = String.format(Config.ACCEPT_SUBJECT, intro.acceptCode);
+
                 if(intro.isComplete()){
                     if(intro.aContact.equals(email)){
-                        chat(intro, reply, true);
+                        chat(intro, intro.bContact+" said: "+reply, true);
 
                     }
                     else  if(intro.bContact.equals(email)){
-                        chat(intro, reply, false);
+                        chat(intro, intro.aContact+" said: "+reply, false);
 
                     }
                 }
-                else if(reply.toLowerCase().contains("yes")){
-                    try {
-                        acceptIntro(intro,email);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    alertContact(intro,email,reply);
+                } catch (ServletException e) {
+                    e.printStackTrace();
                 }
+
 
             }
+
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -375,6 +407,56 @@ public class Util {
 
     }
 
+    private static void alertContact( Introduction intro,String contact,String reply) throws ServletException {
+        String subject = String.format(Config.ACCEPT_SUBJECT, intro.acceptCode);
+
+        if(intro.aContact.contains(contact)){
+             if(intro.aReplied){
+
+                 //intro not complete, send wait message
+                 if(intro.aText){
+                     sendSMS(intro.aContact,Config.WAITING_MESSAGE,intro.phone);
+                 }
+                 else {
+                     sendEmail(intro.aContact,Config.WAITING_MESSAGE, "Admin",subject,intro.email);
+                 }
+             }
+             else if(reply.toLowerCase().contains("yes")){
+                 try {
+                     acceptIntro(intro,intro.aContact);
+                 } catch (ServletException e) {
+                     e.printStackTrace();
+                 }
+                 //see if he wants to accept
+
+             }
+        }
+        else if(intro.bContact.contains(contact)){
+            if(intro.bReplied){
+
+                //intro not complete, send wait message
+                if(intro.bText){
+                    sendSMS(intro.bContact,Config.WAITING_MESSAGE,intro.phone);
+                }
+                else {
+                    sendEmail(intro.bContact,Config.WAITING_MESSAGE, "Admin",subject,intro.email);
+                }
+            }
+            else if(reply.toLowerCase().contains("yes")){
+                try {
+                    acceptIntro(intro,intro.bContact);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                }
+                //see if he wants to accept
+
+            }
+
+        }
+
+
+    }
+
     private static void acceptIntro(Introduction intro, String contact) throws ServletException {
         String subject = String.format(Config.CHAT_SUBJECT, intro.acceptCode);
 
@@ -382,10 +464,12 @@ public class Util {
             if(intro.aReplied){
                 if(intro.aText){
                     //send already acceptance text
-
+                    sendSMS(intro.aContact,Config.ACCEPTED_MESSAGE,intro.phone);
                 }
                 else {
                     //send  already acceptance email
+                    sendEmail(intro.aContact,Config.ACCEPTED_MESSAGE,intro.aName,subject,intro.email);
+
                 }
 
             }
@@ -393,12 +477,16 @@ public class Util {
                 intro.aReplied = true;
                 if(intro.aText){
                     //send acceptance text
-                    sendSMS(intro.aContact,Config.ACCEPTED_MESSAGE,intro.phone);
+                    sendSMS(intro.aContact,Config.Text_MESSAGE2,intro.phone);
+                    if(!intro.bReplied){
+                        sendSMS(intro.aContact,Config.WAITING_MESSAGE,intro.phone);
+
+                    }
 
                 }
                 else {
                     //send acceptance email
-                    sendEmail(intro.aContact, Config.EMAIL_MESSAGE2, intro.aName, subject);
+                    sendEmail(intro.aContact, Config.EMAIL_MESSAGE2, intro.aName, subject,intro.email);
 
                 }
                 if (intro.isComplete()) {
@@ -419,7 +507,7 @@ public class Util {
                 }
                 else {
                     //send  already acceptance email
-                    sendEmail(intro.bContact,Config.ACCEPTED_MESSAGE,intro.bName,subject);
+                    sendEmail(intro.bContact,Config.ACCEPTED_MESSAGE,intro.bName,subject,intro.email);
                 }
 
             }
@@ -427,12 +515,16 @@ public class Util {
                 intro.bReplied = true;
                 if(intro.bText){
                     //send acceptance text
-                    sendSMS(contact,Config.ACCEPTED_MESSAGE,intro.phone);
+                    sendSMS(contact,Config.Text_MESSAGE2,intro.phone);
+                    if(!intro.aReplied){
+                        sendSMS(intro.aContact,Config.WAITING_MESSAGE,intro.phone);
+
+                    }
 
                 }
                 else {
                     //send acceptance email
-                    sendEmail(intro.bContact, Config.EMAIL_MESSAGE2, intro.bName, subject);
+                    sendEmail(intro.bContact, Config.EMAIL_MESSAGE2, intro.bName, subject,intro.email);
 
                 }
                 if (intro.isComplete()) {
@@ -447,7 +539,7 @@ public class Util {
 
         Map<String, Object> introUpdate = new HashMap<String, Object>();
         introUpdate.put("aReplied", intro.aReplied);
-        introUpdate.put("bReplied", intro.aReplied);
+        introUpdate.put("bReplied", intro.bReplied);
 
         introRef.child(intro.uid).updateChildren(introUpdate);
     }
@@ -457,22 +549,25 @@ public class Util {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Introduction introduction = null;
-                String name = "Introduction";
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                    if(introduction.aContact.equals(contactPhone)
-                            || introduction.bContact.equals(contactPhone)) {
-                        introduction = messageSnapshot.getValue(Introduction.class);
+                    Introduction temp = messageSnapshot.getValue(Introduction.class);
+                    if(temp.aContact.equals(contactPhone)
+                            || temp.bContact.equals(contactPhone)) {
+                        introduction = temp;
                     }
+                }
+                if(introduction ==  null){
+                    return;
                 }
 
                 final Introduction intro = introduction;
                 if(intro.isComplete()){
                     if(intro.aContact.equals(contactPhone)){
-                        chat(intro, reply, true);
+                        chat(intro, intro.bName+" said: "+reply, true);
 
                     }
                     else  if(intro.bContact.equals(contactPhone)){
-                        chat(intro, reply, false);
+                        chat(intro, intro.aName+" said: "+reply, false);
 
                     }
                 }
@@ -484,55 +579,6 @@ public class Util {
                     }
                 }
 
-//                if (contactPhone.contains(intro.aContact)) {
-//                    if(intro.aReplied==false ){
-//                        intro.aReplied = true;
-//                        try {
-//                            sendSMS(contactPhone, Config.Text_MESSAGE2,intro.phone);
-//                        } catch (ServletException e) {
-//                            e.printStackTrace();
-//                        }
-//                        if(intro.isComplete()){
-//                            try {
-//                                completeIntro(intro);
-//                            } catch (ServletException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                    else {
-//                        if(intro.isComplete()){
-//                            chat(intro, reply , true);
-//                        }
-//                    }
-//
-//                } else if (contactPhone.contains(intro.bContact)) {
-//                    if(intro.bReplied==false ){
-//                        intro.bReplied = true;
-//                        try {
-//                            sendSMS(contactPhone, Config.Text_MESSAGE2,intro.phone);
-//                        } catch (ServletException e) {
-//                            e.printStackTrace();
-//                        }
-//                        if(intro.isComplete()){
-//                            try {
-//                                completeIntro(intro);
-//                            } catch (ServletException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                    else {
-//                        if(intro.isComplete()){
-//                            chat(intro, reply , false);
-//                        }
-//                    }
-//                }
-//                Map<String, Object> introUpdate = new HashMap<String, Object>();
-//                introUpdate.put("aReplied",intro.aReplied);
-//                introUpdate.put("bReplied",intro.aReplied);
-//
-//                introRef.child(intro.uid).updateChildren(introUpdate);
 
             }
 

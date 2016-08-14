@@ -37,11 +37,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.catalizeapp.catalize_ss16_v5.utils.Utils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,8 +76,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private SharedPreferences sharedPreferences;
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
 
 
@@ -97,23 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             finish();
             return;
         }
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    android.util.Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
-                } else {
-                    // User is signed out
-                    android.util.Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
-        setContentView(R.layout.activity_login);
 
         final EditText firstName = (EditText) findViewById(R.id.first_name);
         final EditText lastName = (EditText) findViewById(R.id.last_name);
@@ -142,14 +119,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     sharedPreferences.edit().putString("first_name", firstName.getText().toString()).apply();
                     sharedPreferences.edit().putString("last_name", lastName.getText().toString()).apply();
                     sharedPreferences.edit().putString("email", email.getText().toString()).apply(); //gets the shared preferences for email and name
-                    mAuth.signInWithEmailAndPassword(email.getText().toString(),mPasswordView.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(!task.isSuccessful()){
-                                Toast.makeText(LoginActivity.this, "Login Failed",Toast.LENGTH_LONG).show();;
-                            }
-                        }
-                    });
+
 
                     Intent intent = new Intent(LoginActivity.this, Nav.class);
                     // intent.putExtra("name_value", firstName.getText().toString());
@@ -190,15 +160,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {

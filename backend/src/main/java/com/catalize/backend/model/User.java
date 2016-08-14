@@ -1,5 +1,7 @@
 package com.catalize.backend.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -7,26 +9,26 @@ import java.util.UUID;
  */
 public class User {
     public String uid;
-    public String firstName;
-    public String lastName;
+    public String displayName;
     public String email;
     public String phone;
-    public int introductions;
-
+    public Integer introductions;
+    public List<String> introList;
     public User() {
         uid = UUID.randomUUID().toString();
         introductions = 0;
+        introList = new ArrayList<>();
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "uid='" + uid + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", displayName='" + displayName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", introductions=" + introductions +
+                ", introList=" + introList +
                 '}';
     }
 }

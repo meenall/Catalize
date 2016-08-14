@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="7dp"
+                android:paddingTop="7dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+    <TextView
+        android:text="date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/log_date"
+        android:textSize="21sp"
+        android:typeface="monospace"/>
+
+    <TextView
+        android:text="You introduced person a to person @string/bottom_sheet_behavior"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:id="@+id/log_intro_text"
+        android:textSize="17sp"
+        android:typeface="monospace"
+        android:maxLines="5"
+        android:layout_width="250dp"/>
+
+    <TextView
+        android:text="Introduction Complete!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/log_intro_text"
+        android:layout_marginTop="10dp"
+        android:id="@+id/log_complete"
+        android:layout_alignLeft="@id/log_intro_text"
+        android:visibility="gone"/>
+</RelativeLayout>

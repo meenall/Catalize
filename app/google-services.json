@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "970776057421-s0au14sr6us2do4ansflivhhdpegot8t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.catalizeapp.catalize_ss16_v5",
+            "certificate_hash": "22A643F9CA17D41841986E65137DF4A5F8FFD472"
+          }
+        },
+        {
           "client_id": "970776057421-7g4shoio7l5cepk6gfmajk6s0jrgelt8.apps.googleusercontent.com",
           "client_type": 3
         }

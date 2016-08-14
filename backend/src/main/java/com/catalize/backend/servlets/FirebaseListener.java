@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -35,7 +36,7 @@ public class FirebaseListener extends HttpServlet {
         String setup = System.getProperty("setup","");
         if(setup.length() == 0 ){
             System.setProperty("setup","setup");
-            startListeners();
+            //startListeners();
         }
 
     }
@@ -76,11 +77,19 @@ public class FirebaseListener extends HttpServlet {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 user.introductions ++;
-                userRef.child(user.uid).setValue(user);
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("introductions",user.introductions);
+
+                userRef.child(user.uid).updateChildren(map);
+                if(user.introList == null || user.introList.size() == 0){
+                    user.introList = new ArrayList<String>();
+                }
+                user.introList.add(introduction.uid);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                logger.warning(databaseError.getMessage());
 
             }
         });
@@ -101,14 +110,7 @@ public class FirebaseListener extends HttpServlet {
 
         }
         introduction.acceptCode = introduction.uid.substring(0,4);
-        introRef.child(introduction.uid).setValue(introduction, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if(databaseError == null){
-                    Util.findNumber(introduction);
-                }
-            }
-        });
+        Util.findNumber(introduction);
 
     }
     private final  ChildEventListener listener = new ChildEventListener() {
@@ -158,7 +160,10 @@ public class FirebaseListener extends HttpServlet {
         public void onChildMoved(DataSnapshot dataSnapshot, String prevChildKey) {}
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {}
+        public void onCancelled(DatabaseError databaseError) {
+            logger.warning(databaseError.getMessage());
+
+        }
     };
 
 

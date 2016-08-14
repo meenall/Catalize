@@ -33,7 +33,9 @@ public class MailHandlerServlet extends HttpServlet {
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     Properties props = new Properties();
     Session session = Session.getDefaultInstance(props, null);
-    try {
+      log.info("Received mail message.");
+
+      try {
       MimeMessage message = new MimeMessage(session, req.getInputStream());
       Multipart mp = (Multipart) message.getContent();
       for(int x =  0 ; x< mp.getCount() ; x++){
@@ -43,10 +45,9 @@ public class MailHandlerServlet extends HttpServlet {
         int end =  message.getSubject().indexOf(')');
         String subject = message.getSubject().substring(start+1,end).trim();
         String email = message.getFrom()[0].toString();
-        processEmailResponse(subject,body,email);
+        processEmailResponse(message.getAllRecipients()[0].toString(),body,email);
 
       }
-      log.info("Received mail message.");
     } catch (MessagingException e) {
       // ...
     }
