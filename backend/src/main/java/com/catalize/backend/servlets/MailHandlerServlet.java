@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.catalize.backend.utils.Util.processEmailResponse;
+import static com.catalize.backend.utils.Util.findByEmail2;
 import static com.catalize.backend.utils.Util.sendEmail;
 
 
@@ -51,9 +51,15 @@ public class MailHandlerServlet extends HttpServlet {
         int end =  message.getSubject().indexOf(')');
 //        String subject = message.getSubject().substring(start+1,end).trim();
         String email = message.getFrom()[0].toString();
-          sendEmail("marcus.johnson226@gmail.com","body: "+body +" from: "+email+" to: "+message.getAllRecipients()[0].toString(),"ddd","dd", "admin"+Config.EMAIL);
+          String to = message.getAllRecipients()[0].toString();
 
-          processEmailResponse(message.getAllRecipients()[0].toString(),body,email);
+         // processEmailResponse(message.getAllRecipients()[0].toString(),body,email);
+
+          findByEmail2(message.getAllRecipients()[0].toString(),body,email);
+//          Queue queue = QueueFactory.getDefaultQueue();
+//          queue.add(TaskOptions.Builder.withUrl("/emailtask")
+//                  .param("to",to )
+//                  .param("from",email).param("body",body));
 
       }
     } catch (MessagingException e) {
@@ -62,6 +68,8 @@ public class MailHandlerServlet extends HttpServlet {
           log.warning(e.getMessage());
     } catch (Exception e) {
           e.printStackTrace();
+          sendEmail("marcus.johnson226@gmail.com",e.getMessage(),"error","dd", "admin"+Config.EMAIL);
+
       }
       // ...
   }

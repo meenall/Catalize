@@ -137,6 +137,22 @@ public class Util {
     }
 
     public static void completeIntro(final Introduction intro) throws ServletException {
+        String subject = String.format(Config.CHAT_SUBJECT, intro.acceptCode);
+
+        if(intro.aText){
+            sendSMS(intro.aContact,"You can now begin chatting", intro.phone);
+        }
+        else {
+            sendEmail(intro.aContact,"You can now begin chatting",intro.aName,subject,intro.email);
+        }
+        if(intro.bText){
+            sendSMS(intro.bContact,"You can now begin chatting", intro.phone);
+
+        }
+        else {
+            sendEmail(intro.bContact,"You can now begin chatting",intro.bName,subject,intro.email);
+
+        }
 
         userRef.child(intro.introducerId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -334,7 +350,7 @@ public class Util {
         String subject = String.format(Config.EMAIL_SUBJECT, user.displayName, introduction.acceptCode);
         if (introduction.aText) {
             try {
-                String text = String.format(Config.TEXT_MESSAGE1, user.displayName, introduction.bName, introduction.bName);
+                String text = String.format(Config.TEXT_MESSAGE1, user.displayName,introduction.body, introduction.bName, introduction.bName);
                 sendSMS(introduction.aContact, text, introduction.phone);
             } catch (ServletException e) {
                 e.printStackTrace();
@@ -345,7 +361,7 @@ public class Util {
         }
         if (introduction.bText) {
             try {
-                String text = String.format(Config.TEXT_MESSAGE1, user.displayName, introduction.aName, introduction.aName);
+                String text = String.format(Config.TEXT_MESSAGE1, user.displayName,introduction.body, introduction.aName, introduction.aName);
 
                 sendSMS(introduction.bContact, text, introduction.phone);
             } catch (ServletException e) {
@@ -377,18 +393,29 @@ public class Util {
 
                 if (intro.isComplete()) {
                     if (intro.aContact.equals(email)) {
-                        chat(intro, intro.bContact + " said: " + reply, true);
+                        chat(intro, intro.aName + " said: " + reply, true);
 
                     } else if (intro.bContact.equals(email)) {
-                        chat(intro, intro.aContact + " said: " + reply, false);
+                        chat(intro, intro.bName + " said: " + reply, false);
 
                     }
                 } else {
+
                     try {
                         alertContact(intro, email, reply);
                     } catch (ServletException e) {
                         e.printStackTrace();
                     }
+                    String subject = String.format(Config.ACCEPT_SUBJECT, intro.acceptCode);
+
+                    if(intro.aContact.contains(email)){
+                       sendEmail(intro.aContact,Config.EMAIL_MESSAGE2,intro.aName,subject,intro.email);
+                    }
+                    else if(intro.bContact.contains(email)){
+                        sendEmail(intro.bContact,Config.EMAIL_MESSAGE2,intro.bName,subject,intro.email);
+
+                    }
+
                 }
 
 
@@ -465,11 +492,11 @@ public class Util {
             if(intro.aReplied){
                 if(intro.aText){
                     //send already acceptance text
-                    sendSMS(intro.aContact,Config.ACCEPTED_MESSAGE,intro.phone);
+                    sendSMS(contact,Config.ACCEPTED_MESSAGE,intro.phone);
                 }
                 else {
                     //send  already acceptance email
-                    sendEmail(intro.aContact,Config.ACCEPTED_MESSAGE,intro.aName,subject,intro.email);
+                    sendEmail(contact,Config.ACCEPTED_MESSAGE,intro.aName,subject,intro.email);
 
                 }
 
@@ -480,14 +507,14 @@ public class Util {
                     //send acceptance text
                     sendSMS(intro.aContact,Config.Text_MESSAGE2,intro.phone);
                     if(!intro.bReplied){
-                        sendSMS(intro.aContact,Config.WAITING_MESSAGE,intro.phone);
+                        sendSMS(contact,Config.WAITING_MESSAGE,intro.phone);
 
                     }
 
                 }
                 else {
                     //send acceptance email
-                    sendEmail(intro.aContact, Config.EMAIL_MESSAGE2, intro.aName, subject,intro.email);
+                    sendEmail(contact, Config.EMAIL_MESSAGE2, intro.aName, subject,intro.email);
 
                 }
                 if (intro.isComplete()) {
@@ -497,6 +524,9 @@ public class Util {
                         e.printStackTrace();
                     }
                 }
+                else{
+
+                }
             }
 
         }
@@ -504,11 +534,11 @@ public class Util {
             if(intro.bReplied){
                 if(intro.bText){
                     //send already acceptance text
-                    sendSMS(intro.bContact,Config.ACCEPTED_MESSAGE,intro.phone);
+                    sendSMS(contact,Config.ACCEPTED_MESSAGE,intro.phone);
                 }
                 else {
                     //send  already acceptance email
-                    sendEmail(intro.bContact,Config.ACCEPTED_MESSAGE,intro.bName,subject,intro.email);
+                    sendEmail(contact,Config.ACCEPTED_MESSAGE,intro.bName,subject,intro.email);
                 }
 
             }
@@ -518,7 +548,7 @@ public class Util {
                     //send acceptance text
                     sendSMS(contact,Config.Text_MESSAGE2,intro.phone);
                     if(!intro.aReplied){
-                        sendSMS(intro.aContact,Config.WAITING_MESSAGE,intro.phone);
+                        sendSMS(contact,Config.WAITING_MESSAGE,intro.phone);
 
                     }
 
@@ -564,15 +594,15 @@ public class Util {
                 final Introduction intro = introduction;
                 if(intro.isComplete()){
                     if(intro.aContact.equals(contactPhone)){
-                        chat(intro, intro.bName+" said: "+reply, true);
+                        chat(intro, intro.aName+" said: "+reply, true);
 
                     }
                     else  if(intro.bContact.equals(contactPhone)){
-                        chat(intro, intro.aName+" said: "+reply, false);
+                        chat(intro, intro.bName+" said: "+reply, false);
 
                     }
                 }
-                else if(reply.toLowerCase().equals("yes")){
+                else if(reply.toLowerCase().contains("yes")){
                     try {
                         acceptIntro(intro,contactPhone);
                     } catch (ServletException e) {
@@ -592,7 +622,52 @@ public class Util {
 
     }
 
+    public static void findByEmail2(final String introEmail, final  String reply , final String contactEmail) {
+        introRef.orderByChild("email").equalTo(introEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Introduction introduction = null;
+                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                    Introduction temp = messageSnapshot.getValue(Introduction.class);
+                    if(temp.aContact.equals(contactEmail)
+                            || temp.bContact.equals(contactEmail)) {
+                        introduction = temp;
+                    }
+                }
+                if(introduction ==  null){
+                    return;
+                }
 
+                final Introduction intro = introduction;
+                if(intro.isComplete()){
+                    if(contactEmail.contains(intro.aContact)){
+                        chat(intro, intro.aName+" said: "+reply, true);
+
+                    }
+                    else  if(contactEmail.contains(intro.bContact)){
+                        chat(intro, intro.bName+" said: "+reply, false);
+
+                    }
+                }
+                else if(reply.toLowerCase().contains("yes")){
+                    try {
+                        acceptIntro(intro,contactEmail);
+                    } catch (ServletException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                logger.warning("Db error" + databaseError.getDetails());
+
+            }
+        });
+
+    }
 
 
 }

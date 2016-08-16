@@ -40,7 +40,7 @@ appengine {
   downloadSdk = true
 
     httpAddress = "0.0.0.0"
-
+    httpPort = 8888
   appcfg {
     oauth2 = true
 

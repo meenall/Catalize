@@ -56,6 +56,7 @@ public class Account extends AppCompatActivity {
     private String lastName;
     private String personEmail;
     private IntroductionApi myApiService;
+    private EditText prompt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class Account extends AppCompatActivity {
         }
 
         final Dialog dialog = new Dialog(Account.this);
-        final EditText prompt =(EditText) findViewById(R.id.prompt);
+         prompt =(EditText) findViewById(R.id.prompt);
 //        prompt.requestFocus();
         if (Nav.person1.contains("@") && Nav.person2.contains("@")) {
             TextView name = (TextView) findViewById(R.id.nameerror);
@@ -226,6 +227,7 @@ public class Account extends AppCompatActivity {
                 intro.setBContact(Nav.number2);
                 intro.setBName(Nav.person2);
                 intro.setIntroducerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                intro.setBody(prompt.getText().toString());
                 new EndpointsAsyncTask(intro).execute();
 
 //                DbManager.getInstance().addIntroduction(intro);

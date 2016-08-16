@@ -1,6 +1,6 @@
 {
  "kind": "discovery#rpcDescription",
- "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/QifdEpMWCGbYB9aqE4QcAn3kGbw\"",
+ "etag": "\"zRMgE0l9nVDW4S28VYYcYQF9UW4/FuLj7TZhPKkgv0tDfP9fc_6-iOs\"",
  "discoveryVersion": "v1",
  "id": "introductionApi:v1",
  "name": "introductionApi",
@@ -104,6 +104,9 @@
     },
     "bText": {
      "type": "boolean"
+    },
+    "body": {
+     "type": "string"
     },
     "complete": {
      "type": "boolean"

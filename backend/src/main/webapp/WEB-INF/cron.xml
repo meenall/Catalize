@@ -3,6 +3,6 @@
     <cron>
         <url>/expiration</url>
         <description>Checks for expired introductions</description>
-        <schedule>every 4 hours</schedule>
+        <schedule>every 72 hours</schedule>
     </cron>
 </cronentries>
