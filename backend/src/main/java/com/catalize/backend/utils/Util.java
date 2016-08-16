@@ -350,18 +350,18 @@ public class Util {
         String subject = String.format(Config.EMAIL_SUBJECT, user.displayName, introduction.acceptCode);
         if (introduction.aText) {
             try {
-                String text = String.format(Config.TEXT_MESSAGE1, user.displayName,introduction.body, introduction.bName, introduction.bName);
+                String text = String.format(Config.TEXT_MESSAGE1, user.displayName,introduction.aName, introduction.body, introduction.bName);
                 sendSMS(introduction.aContact, text, introduction.phone);
             } catch (ServletException e) {
                 e.printStackTrace();
             }
         } else {
-            String email = String.format(Config.EMAIL_MESSAGE1, user.displayName, introduction.bName, introduction.bName);
+            String email = String.format(Config.EMAIL_MESSAGE1, user.displayName,   introduction.aName, introduction.body, introduction.aName);
             sendEmail(introduction.aContact, email, introduction.aName, subject,introduction.email);
         }
         if (introduction.bText) {
             try {
-                String text = String.format(Config.TEXT_MESSAGE1, user.displayName,introduction.body, introduction.aName, introduction.aName);
+                String text = String.format(Config.TEXT_MESSAGE1, user.displayName,introduction.aName, introduction.body, introduction.aName);
 
                 sendSMS(introduction.bContact, text, introduction.phone);
             } catch (ServletException e) {
@@ -369,7 +369,7 @@ public class Util {
             }
 
         } else {
-            String email = String.format(Config.EMAIL_MESSAGE1, user.displayName, introduction.aName, introduction.aName);
+            String email = String.format(Config.EMAIL_MESSAGE1, user.displayName, introduction.aName, introduction.body,introduction.aName);
 
             sendEmail(introduction.bContact, email, introduction.bName, subject,introduction.email);
         }
@@ -488,7 +488,7 @@ public class Util {
     private static void acceptIntro(Introduction intro, String contact) throws ServletException {
         String subject = String.format(Config.CHAT_SUBJECT, intro.acceptCode);
 
-        if(intro.aContact.equals(contact)){
+        if(contact.contains(intro.aContact)){
             if(intro.aReplied){
                 if(intro.aText){
                     //send already acceptance text
@@ -510,27 +510,41 @@ public class Util {
                         sendSMS(contact,Config.WAITING_MESSAGE,intro.phone);
 
                     }
+                    else {
+                        sendSMS(contact,"You can begin chatting",intro.phone);
+
+                    }
 
                 }
                 else {
                     //send acceptance email
                     sendEmail(contact, Config.EMAIL_MESSAGE2, intro.aName, subject,intro.email);
+                    if(!intro.bReplied){
+                        sendEmail(contact, Config.WAITING_MESSAGE, intro.aName, subject,intro.email);
 
-                }
-                if (intro.isComplete()) {
-                    try {
-                        completeIntro(intro);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
+
                     }
-                }
-                else{
+                    else {
+                        sendEmail(contact, "You can begin chatting", intro.aName, subject,intro.email);
+
+
+                    }
 
                 }
+//                if (intro.isComplete()) {
+//                    try {
+//                        completeIntro(intro);
+//                    } catch (ServletException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                else{
+//
+//                }
             }
 
         }
-        else if(intro.bContact.equals(contact)){
+        else if(contact.contains(intro.bContact)){
             if(intro.bReplied){
                 if(intro.bText){
                     //send already acceptance text
@@ -551,20 +565,32 @@ public class Util {
                         sendSMS(contact,Config.WAITING_MESSAGE,intro.phone);
 
                     }
+                    else {
+                        sendSMS(contact,"You can begin chatting",intro.phone);
+
+                    }
 
                 }
                 else {
                     //send acceptance email
                     sendEmail(intro.bContact, Config.EMAIL_MESSAGE2, intro.bName, subject,intro.email);
+                    if(!intro.aReplied){
+                        sendEmail(intro.bContact, Config.EMAIL_MESSAGE2, intro.bName, subject,intro.email);
+
+                    }
+                    else {
+                        sendEmail(intro.bContact,"You can begin chatting", intro.bName, subject,intro.email);
+
+                    }
 
                 }
-                if (intro.isComplete()) {
-                    try {
-                        completeIntro(intro);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                if (intro.isComplete()) {
+//                    try {
+//                        completeIntro(intro);
+//                    } catch (ServletException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
             }
         }
 
@@ -629,8 +655,8 @@ public class Util {
                 Introduction introduction = null;
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
                     Introduction temp = messageSnapshot.getValue(Introduction.class);
-                    if(temp.aContact.equals(contactEmail)
-                            || temp.bContact.equals(contactEmail)) {
+                    if(contactEmail.contains(temp.aContact)
+                            || contactEmail.contains(temp.bContact)) {
                         introduction = temp;
                     }
                 }

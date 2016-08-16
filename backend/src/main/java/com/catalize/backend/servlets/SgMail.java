@@ -1,8 +1,13 @@
 package com.catalize.backend.servlets;
 
-import com.google.gson.JsonObject;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,20 +23,35 @@ import static com.catalize.backend.utils.Util.findByEmail2;
 public class SgMail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String envelope = req.getParameter("envelope");
-//        JSONObject jsonObj = new JSONObject(envelope);
+        String to = null, from  = null, text = null;
 
-        String to = req.getParameter("to");
-        String body = req.getParameter("body");
-        String from = req.getParameter("from");
-//        String from = jsonObj.getString("from");
-        JsonObject rep = new JsonObject();
-        rep.addProperty("from",from);
-        rep.addProperty("body",body);
-        rep.addProperty("to",to);
+        try {
+            ServletFileUpload upload = new ServletFileUpload();
 
-        findByEmail2(to,body,from);
-        resp.getWriter().print(rep.toString());
+            FileItemIterator iterator = upload.getItemIterator(req);
+            while (iterator.hasNext()) {
+                FileItemStream item = iterator.next();
+                String name = item.getFieldName();
+                InputStream stream = item.openStream();
+                String result = new Scanner(stream,"UTF-8").useDelimiter("\\A").next();
+
+
+                if(name.equals("to")){
+                    to = result;
+                }
+                else if(name.equals("from")){
+                    from = result;
+                }
+                else if(name.equals("text")){
+                    text =result;
+                }
+            }
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+
+
+        findByEmail2(to,text,from);
 
     }
 }
