@@ -60,7 +60,7 @@ public class Util {
         Sendgrid mail = new Sendgrid(Config.SEND_GRID_USER,Config.SEND_GRID_PASSWORD);
 
 // set email data
-        mail.setTo(aContact).setFrom(email).setSubject(subject).setText(aBody);
+        mail.setTo(aContact).setFrom(email).setSubject(subject).setText(aBody).setFromName("Catalize App");
 
 // send your message
         mail.send();

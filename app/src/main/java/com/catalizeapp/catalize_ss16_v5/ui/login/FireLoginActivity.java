@@ -123,7 +123,8 @@ public class FireLoginActivity extends AppCompatActivity  implements GoogleApiCl
                 firebaseAuthWithGoogle(account);
             } else {
                 // Google Sign In failed, update UI appropriately
-                Toast.makeText(this,"Login Failed",Toast.LENGTH_LONG).show();
+
+                Toast.makeText(this,"Login Failed" + "with status : " +result.getStatus(),Toast.LENGTH_LONG).show();
                 // ...
             }
         }

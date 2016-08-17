@@ -51,17 +51,17 @@ public class LogAdapter extends ArrayAdapter<Introduction> {
             holder.complete.setVisibility(View.GONE);
 
         }
-        ;
+        Introduction intro = introList.get(position);
 
-        holder.date.setText( introList.get(position).getDate().substring(5,10));
-        if(introList.get(position).getAReplied() && introList.get(position).getBReplied()){
+        holder.date.setText( intro.getDate().substring(5,10));
+        if(intro.getAReplied() && intro.getBReplied()){
             holder.complete.setVisibility(View.VISIBLE);
 
         }
 
 
 
-        holder.intro.setText("Introduced " + introList.get(position).getAName() + " and " +introList.get(position).getBName());
+        holder.intro.setText("Introduced " + intro.getAName() + " and " +intro.getBName());
 
 
 

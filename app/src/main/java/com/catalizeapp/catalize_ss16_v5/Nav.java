@@ -49,6 +49,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.catalizeapp.catalize_ss16_v5.ui.login.FireLoginActivity;
+import com.catalizeapp.catalize_ss16_v5.utils.DbManager;
 import com.catalizeapp.catalize_ss16_v5.utils.Utils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -97,7 +98,7 @@ public class Nav extends AppCompatActivity
         setContentView(R.layout.activity_nav);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
+        DbManager.getInstance().loadIntros();
         if( getIntent().getBooleanExtra("Exit me", false)) {
             finish();
             return; // add this to prevent from doing unnecessary stuffs
