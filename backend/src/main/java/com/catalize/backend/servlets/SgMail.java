@@ -37,10 +37,15 @@ public class SgMail extends HttpServlet {
 
 
                 if(name.equals("to")){
-                    to = result;
+
+                    int start = result.lastIndexOf('<');
+                    int end = result.lastIndexOf('>');
+                     to = result.substring(start+1,end);
                 }
                 else if(name.equals("from")){
-                    from = result;
+                    int start = result.lastIndexOf('<');
+                    int end = result.lastIndexOf('>');
+                    from = result.substring(start+1,end);;
                 }
                 else if(name.equals("text")){
                     text =result;
@@ -49,6 +54,7 @@ public class SgMail extends HttpServlet {
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
+
 
 
         findByEmail2(to,text,from);

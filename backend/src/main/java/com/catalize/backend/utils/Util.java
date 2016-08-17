@@ -56,7 +56,7 @@ public class Util {
         return phone;
     }
 
-    public static void sendEmail(String aContact, String aBody, String aName, String subject, String email) {
+    public static void sendEmail(String aContact, String aBody,  String subject, String email) {
         Sendgrid mail = new Sendgrid(Config.SEND_GRID_USER,Config.SEND_GRID_PASSWORD);
 
 // set email data
@@ -111,7 +111,7 @@ public class Util {
     }
 
     public static void chat(Introduction introduction, String body, boolean isA) {
-        String subject = String.format(Config.CHAT_SUBJECT, introduction.acceptCode);
+        String  subject = introduction.acceptCode;
 
         if (isA) {
             if (introduction.bText) {
@@ -121,7 +121,7 @@ public class Util {
                     e.printStackTrace();
                 }
             } else {
-                sendEmail(introduction.bContact, body, introduction.bName, subject,introduction.email);
+                sendEmail(introduction.bContact, body, subject,introduction.email);
             }
         } else {
             if (introduction.aText) {
@@ -131,26 +131,26 @@ public class Util {
                     e.printStackTrace();
                 }
             } else {
-                sendEmail(introduction.aContact, body, introduction.aName, subject,introduction.email);
+                sendEmail(introduction.aContact, body, subject,introduction.email);
             }
         }
     }
 
     public static void completeIntro(final Introduction intro) throws ServletException {
-        String subject = String.format(Config.CHAT_SUBJECT, intro.acceptCode);
+        String subject = intro.subject+ " ( "+intro.acceptCode+" )";
 
         if(intro.aText){
             sendSMS(intro.aContact,"You can now begin chatting", intro.phone);
         }
         else {
-            sendEmail(intro.aContact,"You can now begin chatting",intro.aName,subject,intro.email);
+            sendEmail(intro.aContact,"You can now begin chatting",subject,intro.email);
         }
         if(intro.bText){
             sendSMS(intro.bContact,"You can now begin chatting", intro.phone);
 
         }
         else {
-            sendEmail(intro.bContact,"You can now begin chatting",intro.bName,subject,intro.email);
+            sendEmail(intro.bContact,"You can now begin chatting",subject,intro.email);
 
         }
 
@@ -159,7 +159,7 @@ public class Util {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
-                    String subject = String.format(Config.EMAIL_SUBJECT, user.displayName, intro.acceptCode);
+                    String subject = intro.subject+ " ( "+intro.acceptCode+" )";
 
                     if (user.phone != null && user.phone.length() > 0) {
                         try {
@@ -168,7 +168,7 @@ public class Util {
                             e.printStackTrace();
                         }
                     } else if (user.email != null && user.email.length() > 0) {
-                        sendEmail(user.email, intro.aName + " has been introduced to " + intro.bName, user.displayName, subject,intro.email);
+                        sendEmail(user.email, intro.aName + " has been introduced to " + intro.bName, subject,intro.email);
                     }
                 }
 
@@ -259,16 +259,16 @@ public class Util {
     }
 
     public static void expiredIntro(Introduction intro) throws ServletException {
-        String subject = String.format(Config.EXPIRED_SUBJECT, intro.acceptCode);
+        String subject = intro.subject+ " ( "+intro.acceptCode+" )";
         if (intro.aText) {
             sendSMS(intro.aContact, Config.EXPIRED_MESSAGE, intro.phone);
         } else {
-            sendEmail(intro.aContact, Config.EXPIRED_MESSAGE, intro.aName, subject,intro.email);
+            sendEmail(intro.aContact, Config.EXPIRED_MESSAGE,  subject,intro.email);
         }
         if (intro.bText) {
             sendSMS(intro.bContact, Config.EXPIRED_MESSAGE, intro.phone);
         } else {
-            sendEmail(intro.bContact, Config.EXPIRED_MESSAGE, intro.aName, subject,intro.email);
+            sendEmail(intro.bContact, Config.EXPIRED_MESSAGE,  subject,intro.email);
 
         }
     }
@@ -347,7 +347,7 @@ public class Util {
     private static void sendMessages(User user, Introduction introduction) {
         introduction.active = true;
         introRef.child(introduction.uid).setValue(introduction);
-        String subject = String.format(Config.EMAIL_SUBJECT, user.displayName, introduction.acceptCode);
+        String subject = introduction.subject+ " ( "+introduction.acceptCode+" )";
         if (introduction.aText) {
             try {
                 String text = String.format(Config.TEXT_MESSAGE1, user.displayName,introduction.aName, introduction.body, introduction.bName);
@@ -357,7 +357,7 @@ public class Util {
             }
         } else {
             String email = String.format(Config.EMAIL_MESSAGE1, user.displayName,   introduction.aName, introduction.body, introduction.aName);
-            sendEmail(introduction.aContact, email, introduction.aName, subject,introduction.email);
+            sendEmail(introduction.aContact, email, subject,introduction.email);
         }
         if (introduction.bText) {
             try {
@@ -371,9 +371,11 @@ public class Util {
         } else {
             String email = String.format(Config.EMAIL_MESSAGE1, user.displayName, introduction.aName, introduction.body,introduction.aName);
 
-            sendEmail(introduction.bContact, email, introduction.bName, subject,introduction.email);
+            sendEmail(introduction.bContact, email, subject,introduction.email);
         }
     }
+
+
 
     public static  void processEmailResponse(final String acceptCode, final  String reply , final String email) {
         ValueEventListener listener = new ValueEventListener() {
@@ -406,13 +408,13 @@ public class Util {
                     } catch (ServletException e) {
                         e.printStackTrace();
                     }
-                    String subject = String.format(Config.ACCEPT_SUBJECT, intro.acceptCode);
+                    String subject = intro.subject+ " ( "+intro.acceptCode+" )";
 
                     if(intro.aContact.contains(email)){
-                       sendEmail(intro.aContact,Config.EMAIL_MESSAGE2,intro.aName,subject,intro.email);
+                       sendEmail(intro.aContact,Config.EMAIL_MESSAGE2,subject,intro.email);
                     }
                     else if(intro.bContact.contains(email)){
-                        sendEmail(intro.bContact,Config.EMAIL_MESSAGE2,intro.bName,subject,intro.email);
+                        sendEmail(intro.bContact,Config.EMAIL_MESSAGE2,subject,intro.email);
 
                     }
 
@@ -436,7 +438,7 @@ public class Util {
     }
 
     private static void alertContact( Introduction intro,String contact,String reply) throws ServletException {
-        String subject = String.format(Config.ACCEPT_SUBJECT, intro.acceptCode);
+        String subject = intro.subject+ " ( "+intro.acceptCode+" )";
 
         if(intro.aContact.contains(contact)){
              if(intro.aReplied){
@@ -446,7 +448,7 @@ public class Util {
                      sendSMS(intro.aContact,Config.WAITING_MESSAGE,intro.phone);
                  }
                  else {
-                     sendEmail(intro.aContact,Config.WAITING_MESSAGE, "Admin",subject,intro.email);
+                     sendEmail(intro.aContact,Config.WAITING_MESSAGE,subject,intro.email);
                  }
              }
              else if(reply.toLowerCase().contains("yes")){
@@ -467,7 +469,7 @@ public class Util {
                     sendSMS(intro.bContact,Config.WAITING_MESSAGE,intro.phone);
                 }
                 else {
-                    sendEmail(intro.bContact,Config.WAITING_MESSAGE, "Admin",subject,intro.email);
+                    sendEmail(intro.bContact,Config.WAITING_MESSAGE,subject,intro.email);
                 }
             }
             else if(reply.toLowerCase().contains("yes")){
@@ -485,8 +487,9 @@ public class Util {
 
     }
 
-    private static void acceptIntro(Introduction intro, String contact) throws ServletException {
-        String subject = String.format(Config.CHAT_SUBJECT, intro.acceptCode);
+    private static void acceptIntro(final Introduction intro, String contact) throws ServletException {
+        final String subject = intro.subject+ " ( "+intro.acceptCode+" )";
+
 
         if(contact.contains(intro.aContact)){
             if(intro.aReplied){
@@ -496,51 +499,26 @@ public class Util {
                 }
                 else {
                     //send  already acceptance email
-                    sendEmail(contact,Config.ACCEPTED_MESSAGE,intro.aName,subject,intro.email);
+                    sendEmail(contact,Config.ACCEPTED_MESSAGE,subject,intro.email);
 
                 }
 
             }
             else {
+                /// haven't accepted
                 intro.aReplied = true;
                 if(intro.aText){
                     //send acceptance text
                     sendSMS(intro.aContact,Config.Text_MESSAGE2,intro.phone);
-                    if(!intro.bReplied){
-                        sendSMS(contact,Config.WAITING_MESSAGE,intro.phone);
 
-                    }
-                    else {
-                        sendSMS(contact,"You can begin chatting",intro.phone);
-
-                    }
 
                 }
                 else {
                     //send acceptance email
-                    sendEmail(contact, Config.EMAIL_MESSAGE2, intro.aName, subject,intro.email);
-                    if(!intro.bReplied){
-                        sendEmail(contact, Config.WAITING_MESSAGE, intro.aName, subject,intro.email);
-
-
-                    }
-                    else {
-                        sendEmail(contact, "You can begin chatting", intro.aName, subject,intro.email);
-
-
-                    }
+                    sendEmail(contact, Config.EMAIL_MESSAGE2, subject,intro.email);
 
                 }
-//                if (intro.isComplete()) {
-//                    try {
-//                        completeIntro(intro);
-//                    } catch (ServletException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                else{
-//
-//                }
+
             }
 
         }
@@ -552,7 +530,7 @@ public class Util {
                 }
                 else {
                     //send  already acceptance email
-                    sendEmail(contact,Config.ACCEPTED_MESSAGE,intro.bName,subject,intro.email);
+                    sendEmail(contact,Config.ACCEPTED_MESSAGE,subject,intro.email);
                 }
 
             }
@@ -561,44 +539,85 @@ public class Util {
                 if(intro.bText){
                     //send acceptance text
                     sendSMS(contact,Config.Text_MESSAGE2,intro.phone);
-                    if(!intro.aReplied){
-                        sendSMS(contact,Config.WAITING_MESSAGE,intro.phone);
 
-                    }
-                    else {
-                        sendSMS(contact,"You can begin chatting",intro.phone);
-
-                    }
 
                 }
                 else {
                     //send acceptance email
-                    sendEmail(intro.bContact, Config.EMAIL_MESSAGE2, intro.bName, subject,intro.email);
-                    if(!intro.aReplied){
-                        sendEmail(intro.bContact, Config.EMAIL_MESSAGE2, intro.bName, subject,intro.email);
+                    sendEmail(intro.bContact, Config.EMAIL_MESSAGE2, subject,intro.email);
 
-                    }
-                    else {
-                        sendEmail(intro.bContact,"You can begin chatting", intro.bName, subject,intro.email);
-
-                    }
 
                 }
-//                if (intro.isComplete()) {
-//                    try {
-//                        completeIntro(intro);
-//                    } catch (ServletException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+
             }
         }
 
         Map<String, Object> introUpdate = new HashMap<String, Object>();
         introUpdate.put("aReplied", intro.aReplied);
         introUpdate.put("bReplied", intro.bReplied);
+        final Introduction updated = intro;
 
-        introRef.child(intro.uid).updateChildren(introUpdate);
+        introRef.child(intro.uid).updateChildren(introUpdate, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(updated.aReplied && updated.bReplied){
+                    try {
+                        completeIntro(updated);
+                    } catch (ServletException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else{
+    /// b didnt reply
+                   if(!updated.bReplied) {
+                       if(updated.bText){
+                           try {
+                               sendSMS(updated.bContact,"Waiting for your reply",updated.phone);
+                           } catch (ServletException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                       else {
+                            sendEmail(updated.bContact,"Waiting for your reply",subject, intro.email);
+                        }
+                       if(updated.aText){
+                           try {
+                               sendSMS(updated.aContact,"Waiting  for "+intro.bName+" to reply",updated.phone);
+                           } catch (ServletException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                       else {
+                           sendEmail(updated.aContact,"Waiting  for "+intro.bName+" to reply",subject,intro.email);
+                       }
+                   }
+                   /// a didnt reply
+                    else if(!updated.aReplied) {
+                       if(updated.aText){
+                           try {
+                               sendSMS(updated.aContact,"Waiting for your reply",updated.phone);
+                           } catch (ServletException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                       else {
+                           sendEmail(updated.aContact,"Waiting for your reply",subject, intro.email);
+                       }
+                       if(updated.bText){
+                           try {
+                               sendSMS(updated.bContact,"Waiting  for "+intro.aName+" to reply",updated.phone);
+                           } catch (ServletException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                       else {
+                           sendEmail(updated.bContact,"Waiting  for "+intro.aName+" to reply",subject,intro.email);
+                       }
+
+                   }
+                }
+            }
+        });
     }
 
     public static void findIntroudctionbyPhone(String accountPhone,final  String reply ,final String contactPhone) {

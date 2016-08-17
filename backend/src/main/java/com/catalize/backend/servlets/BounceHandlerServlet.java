@@ -1,6 +1,5 @@
 package com.catalize.backend.servlets;
 
-import com.catalize.backend.utils.Config;
 import com.google.appengine.api.mail.BounceNotification;
 import com.google.appengine.api.mail.BounceNotificationParser;
 
@@ -11,8 +10,6 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static com.catalize.backend.utils.Util.sendEmail;
 
 public class BounceHandlerServlet extends HttpServlet {
 
@@ -34,7 +31,7 @@ public class BounceHandlerServlet extends HttpServlet {
       // bounce.getNotification().getText() 
       // ...
       String body = "notificatoin: " + bounce.getNotification().getText();
-      sendEmail(Config.ERROR_EMAIL,body,"Marcus","Error","admin"+Config.EMAIL);
+//      sendEmail(Config.ERROR_EMAIL,body,"Marcus","Error","admin"+Config.EMAIL);
     } catch (MessagingException e) {
 
     }

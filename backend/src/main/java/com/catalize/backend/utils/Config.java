@@ -9,7 +9,7 @@ public class Config {
     public final  static String ERROR_EMAIL = "marcus.johnson226@gmail.com";
     public final  static String EMAIL = "@mail.catalizeapp.com";
 
-    public final static  String EMAIL_SUBJECT  = "Introduction from %s ( %s )";
+    public final static  String EMAIL_SUBJECT  = "Catalize Introduction ( %s )";
     public final static  String CHAT_SUBJECT  = "Chat from Introduction ( %s )";
     public final static  String ACCEPT_SUBJECT  = "Introduction  Accepted ( %s )";
     public final static  String EXPIRED_SUBJECT  = "Introduction  Expired ( %s )";

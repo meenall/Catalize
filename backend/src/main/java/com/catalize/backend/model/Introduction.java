@@ -15,6 +15,7 @@ public class Introduction {
     public String phone;
     public String email;
     public  String body;
+    public String subject;
     public String introducerId;
     public String aName;
     public String aContact;

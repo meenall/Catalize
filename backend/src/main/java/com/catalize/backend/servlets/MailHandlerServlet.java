@@ -64,11 +64,11 @@ public class MailHandlerServlet extends HttpServlet {
       }
     } catch (MessagingException e) {
       // ...
-          sendEmail("marcus.johnson226@gmail.com",e.getMessage(),"error","dd", "admin"+Config.EMAIL);
+          sendEmail("marcus.johnson226@gmail.com",e.getMessage(),"error", "admin"+Config.EMAIL);
           log.warning(e.getMessage());
     } catch (Exception e) {
           e.printStackTrace();
-          sendEmail("marcus.johnson226@gmail.com",e.getMessage(),"error","dd", "admin"+Config.EMAIL);
+          sendEmail("marcus.johnson226@gmail.com",e.getMessage(),"error", "admin"+Config.EMAIL);
 
       }
       // ...

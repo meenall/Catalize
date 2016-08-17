@@ -142,7 +142,11 @@ public class IntroductionEndpoint {
         userRef.child(introduction.introducerId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 User user = dataSnapshot.getValue(User.class);
+                if(user == null){
+                    return;
+                }
                 if(user.introductions == null){
                     user.introductions  =  0;
                 }
@@ -158,6 +162,26 @@ public class IntroductionEndpoint {
                 map.put("introductions",user.introductions);
                 map.put("introList",user.introList);
                 userRef.child(user.uid).updateChildren(map);
+                introduction.subject = "Introduction from "+user.displayName;
+                if(introduction.aContact.contains("@")){
+                    introduction.aText = false;
+                }
+                else {
+                    introduction.aText = true;
+                    introduction.aContact = Util.formatNumber(introduction.aContact);
+
+                }
+                if(introduction.bContact.contains("@")){
+                    introduction.bText = false;
+                }
+                else {
+                    introduction.bText = true;
+                    introduction.bContact = Util.formatNumber(introduction.bContact);
+
+                }
+                introduction.acceptCode = introduction.uid.substring(0,4);
+                //ref.orderByChild("active").equalTo(false).addChildEventListener(listener);
+                Util.findNumber(introduction);
 
             }
 
@@ -167,25 +191,7 @@ public class IntroductionEndpoint {
 
             }
         });
-        if(introduction.aContact.contains("@")){
-            introduction.aText = false;
-        }
-        else {
-            introduction.aText = true;
-            introduction.aContact = Util.formatNumber(introduction.aContact);
 
-        }
-        if(introduction.bContact.contains("@")){
-            introduction.bText = false;
-        }
-        else {
-            introduction.bText = true;
-            introduction.bContact = Util.formatNumber(introduction.bContact);
-
-        }
-        introduction.acceptCode = introduction.uid.substring(0,4);
-        //ref.orderByChild("active").equalTo(false).addChildEventListener(listener);
-        Util.findNumber(introduction);
 
 
     }
