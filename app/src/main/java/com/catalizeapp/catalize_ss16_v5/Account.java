@@ -96,7 +96,7 @@ public class Account extends AppCompatActivity {
         }
 
         final Dialog dialog = new Dialog(Account.this);
-         prompt =(EditText) findViewById(R.id.prompt);
+        prompt =(EditText) findViewById(R.id.prompt);
 //        prompt.requestFocus();
         if (Nav.person1.contains("@") && Nav.person2.contains("@")) {
             TextView name = (TextView) findViewById(R.id.nameerror);
@@ -123,9 +123,15 @@ public class Account extends AppCompatActivity {
                                     // get user input and set it to result
                                     // edit text
                                     result = userInput.getText().toString();
+                                    Nav.number1 = Nav.person1;
+                                    Nav.person1 = result;
                                     result2 = userInput2.getText().toString();
-                                    prompt.append("Hello " + result + ", meet " + result2 + ". I am introducing you two because ");
-                                   // prompt.requestFocus();
+                                    Nav.number2 = Nav.person2;
+                                    Nav.person2 = result2;
+                                    prompt.append("Hello " + Nav.person1 + ", meet " + Nav.person2 + ". I am introducing you two because ");
+                                    Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
+                                            Toast.LENGTH_SHORT).show();
+                                    // prompt.requestFocus();
                                     //prompt.setText("Hello " + result + ", meet " + result2 + ". I am introducing you two because...");
                                     //Contacts.person1 = result;
                                 }
@@ -168,13 +174,18 @@ public class Account extends AppCompatActivity {
                                     result = userInput.getText().toString();
                                     if (Nav.person1.contains("@")) {
                                         prompt.append("Hello " + result + ", meet " + Nav.person2 + ". I am introducing you two because ");
-                                       // prompt.requestFocus();
+                                        Nav.number1 = Nav.person1;
+                                        Nav.person1 = result;
+                                        // prompt.requestFocus();
                                         //prompt.setText("Hello " + result + ", meet " + Contacts.person2 + ". I am introducing you two because...");
                                     } else {
-
+                                        Nav.number2 = Nav.person2;
+                                        Nav.person2 = result;
                                         prompt.append("Hello " + Nav.person1 + ", meet " + result + ". I am introducing you two because ");
-                                       // prompt.requestFocus();
+                                        // prompt.requestFocus();
                                     }
+                                    Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
+                                            Toast.LENGTH_SHORT).show();
                                     //Contacts.person1 = result;
                                 }
                             });
@@ -186,7 +197,8 @@ public class Account extends AppCompatActivity {
 
         } else {
             prompt.append("Hello " + Nav.person1 + ", meet " + Nav.person2 + ". I am introducing you two because ");
-            //prompt.requestFocus();
+            Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
+                    Toast.LENGTH_SHORT).show();
         }
         prompt.requestFocus();
 
@@ -199,8 +211,8 @@ public class Account extends AppCompatActivity {
         //final EditText et= (EditText)findViewById(R.id.prompt);
 
         //Breaks email as a contact
-       // Nav.number2 = Nav.number2.replaceAll("[^0-9]","");
-       // Nav.number1 = Nav.number1.replaceAll("[^0-9]","");
+        // Nav.number2 = Nav.number2.replaceAll("[^0-9]","");
+        // Nav.number1 = Nav.number1.replaceAll("[^0-9]","");
 
 
         //people.setText(Contacts.people);
@@ -229,6 +241,7 @@ public class Account extends AppCompatActivity {
                 intro.setIntroducerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 intro.setBody(prompt.getText().toString());
                 new EndpointsAsyncTask(intro).execute();
+
 
 //                DbManager.getInstance().addIntroduction(intro);
 
@@ -307,7 +320,7 @@ public class Account extends AppCompatActivity {
                         // options for running against local devappserver
                         // - 10.0.2.2 is localhost's IP address in Android emulator
                         // - turn off compression when running against local devappserver
-                       .setRootUrl("https://catalize-1470601187382.appspot.com/_ah/api/")
+                        .setRootUrl("https://catalize-1470601187382.appspot.com/_ah/api/")
 
 //                        .setRootUrl("http://192.168.1.64:53582/_ah/api/")
                         .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
@@ -416,7 +429,7 @@ public class Account extends AppCompatActivity {
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         //searchView.clearFocus();
         Toast.makeText(context, "HI",
-                     Toast.LENGTH_SHORT).show();
+                Toast.LENGTH_SHORT).show();
         //searchView.setQuery("", false);
         return true;
     }

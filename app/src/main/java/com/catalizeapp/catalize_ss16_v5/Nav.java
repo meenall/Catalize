@@ -402,7 +402,7 @@ public class Nav extends AppCompatActivity
                                             .getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
                             ContactObject cp2 = new ContactObject();
                             cp2.setName(email);
-                            cp2.setNumber("");
+                            cp2.setNumber("none");
                             cp2.setImage(null);
                             ContactsListClass.phoneList.add(cp2);
                             //Toast.makeText(context, email,
