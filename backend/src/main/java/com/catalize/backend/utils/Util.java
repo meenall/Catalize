@@ -24,7 +24,10 @@ import com.twilio.sdk.resource.list.IncomingPhoneNumberList;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,20 +140,26 @@ public class Util {
     }
 
     public static void completeIntro(final Introduction intro) throws ServletException {
+        Date d = new Date();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        Map<String, Object> introUpdate = new HashMap<String, Object>();
+        introUpdate.put("completeDate", df.format(d));
+        introRef.child(intro.uid).updateChildren(introUpdate);
         String subject = intro.subject+ " ( "+intro.acceptCode+" )";
 
+
         if(intro.aText){
-            sendSMS(intro.aContact,"You can now begin chatting", intro.phone);
+            sendSMS(intro.aContact,Config.COMPLETE_MESSAGE, intro.phone);
         }
         else {
-            sendEmail(intro.aContact,"You can now begin chatting",subject,intro.email);
+            sendEmail(intro.aContact,Config.COMPLETE_MESSAGE,subject,intro.email);
         }
         if(intro.bText){
-            sendSMS(intro.bContact,"You can now begin chatting", intro.phone);
+            sendSMS(intro.bContact,Config.COMPLETE_MESSAGE, intro.phone);
 
         }
         else {
-            sendEmail(intro.bContact,"You can now begin chatting",subject,intro.email);
+            sendEmail(intro.bContact,Config.COMPLETE_MESSAGE,subject,intro.email);
 
         }
 
@@ -377,67 +386,8 @@ public class Util {
 
 
 
-    public static  void processEmailResponse(final String acceptCode, final  String reply , final String email) {
-        ValueEventListener listener = new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                Introduction intro = null;
-                String name = "Introduction";
-                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                    intro = messageSnapshot.getValue(Introduction.class);
-                }
-                if (intro == null) {
-                    return;
-                }
-
-                if (intro.isComplete()) {
-                    if (intro.aContact.equals(email)) {
-                        chat(intro, intro.aName + " said: " + reply, true);
-
-                    } else if (intro.bContact.equals(email)) {
-                        chat(intro, intro.bName + " said: " + reply, false);
-
-                    }
-                } else {
-
-                    try {
-                        alertContact(intro, email, reply);
-                    } catch (ServletException e) {
-                        e.printStackTrace();
-                    }
-                    String subject = intro.subject+ " ( "+intro.acceptCode+" )";
-
-                    if(intro.aContact.contains(email)){
-                       sendEmail(intro.aContact,Config.EMAIL_MESSAGE2,subject,intro.email);
-                    }
-                    else if(intro.bContact.contains(email)){
-                        sendEmail(intro.bContact,Config.EMAIL_MESSAGE2,subject,intro.email);
-
-                    }
-
-                }
-
-
-
-            }
-
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                logger.warning("Db error" + databaseError.getDetails());
-
-            }
-        };
-
-        introRef.orderByChild("email").equalTo(acceptCode).limitToFirst(1).addListenerForSingleValueEvent(listener);
-
-    }
-
-    private static void alertContact( Introduction intro,String contact,String reply) throws ServletException {
+    public static void alertContact( Introduction intro,String contact,String reply) throws ServletException {
         String subject = intro.subject+ " ( "+intro.acceptCode+" )";
 
         if(intro.aContact.contains(contact)){
@@ -555,6 +505,8 @@ public class Util {
         Map<String, Object> introUpdate = new HashMap<String, Object>();
         introUpdate.put("aReplied", intro.aReplied);
         introUpdate.put("bReplied", intro.bReplied);
+
+
         final Introduction updated = intro;
 
         introRef.child(intro.uid).updateChildren(introUpdate, new DatabaseReference.CompletionListener() {

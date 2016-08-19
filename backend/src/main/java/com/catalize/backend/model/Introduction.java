@@ -28,6 +28,8 @@ public class Introduction {
     public  boolean active;
     public String acceptCode;
     public String date;
+    public String completeDate;
+
     public  boolean expired;
 
 
