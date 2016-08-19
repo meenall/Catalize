@@ -401,9 +401,9 @@ public class Account extends AppCompatActivity {
         if (id == R.id.bug) {
             Intent intentReportBug = new Intent(Account.this, ReportBug.class); //
             startActivity(intentReportBug);
-        } else if (id == R.id.settings) {
+        /*} else if (id == R.id.settings) {
             Intent intentSettings = new Intent(Account.this, SettingsActivity.class);
-            startActivity(intentSettings);
+            startActivity(intentSettings);*/
         } else if (id == R.id.contacts) {
             Intent change = new Intent(Account.this, Nav.class);
             startActivity(change);

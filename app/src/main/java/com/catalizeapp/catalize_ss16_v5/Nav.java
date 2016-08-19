@@ -569,9 +569,9 @@ public class Nav extends AppCompatActivity
         if (id == R.id.bug) {
             Intent intentReportBug = new Intent(Nav.this, ReportBug.class); //
             startActivity(intentReportBug);
-        } else if (id == R.id.settings) {
+        /*} else if (id == R.id.settings) {
             Intent intentSettings = new Intent(Nav.this, SettingsActivity.class);
-            startActivity(intentSettings);
+            startActivity(intentSettings);*/
         } else if (id == R.id.contacts) {
             Intent change = new Intent(Nav.this, Nav.class);
             startActivity(change);
@@ -579,6 +579,7 @@ public class Nav extends AppCompatActivity
             Intent change = new Intent(Nav.this, com.catalizeapp.catalize_ss16_v5.Log.class);
             startActivity(change);
         } else if (id == R.id.log_out) {
+            Utils.saveSharedSetting(Nav.this, Nav.PREF_USER_FIRST_TIME, "true");
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(this, FireLoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

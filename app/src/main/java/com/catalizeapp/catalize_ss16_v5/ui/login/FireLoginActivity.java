@@ -184,6 +184,6 @@ public class FireLoginActivity extends AppCompatActivity  implements GoogleApiCl
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(TAG,connectionResult.getErrorMessage());
+        Log.d(TAG,connectionResult.getErrorMessage()+"");
     }
 }

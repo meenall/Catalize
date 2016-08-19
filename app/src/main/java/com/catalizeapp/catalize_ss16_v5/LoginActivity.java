@@ -91,7 +91,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return;
         }
 
-
         final EditText firstName = (EditText) findViewById(R.id.first_name);
         final EditText lastName = (EditText) findViewById(R.id.last_name);
         final EditText email = (EditText) findViewById(R.id.email);
