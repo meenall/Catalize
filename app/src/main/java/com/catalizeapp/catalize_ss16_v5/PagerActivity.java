@@ -250,10 +250,10 @@ public class PagerActivity extends AppCompatActivity {
                 textView2.setText("Select one or two contacts to introduce and hit 'Make An Introduction'.");
             } else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) {
                 textView.setText("Write your introduction");
-                textView2.setText("Give some context for the introduction. Both contacts will receive the introduction without having to exchange contact information.");
+                textView2.setText("Give some context for the introduction. Both parties will receive the introduction without having to exchange contact information.");
             } else if (getArguments().getInt(ARG_SECTION_NUMBER) == 3) {
                 textView.setText("Check the status of your introduction");
-                textView2.setText("See your introductions status under the 'Activity log' section");
+                textView2.setText("See your introduction's status under the 'Activity log' section");
             }
 
             img = (ImageView) rootView.findViewById(R.id.section_img);

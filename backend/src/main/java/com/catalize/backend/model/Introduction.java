@@ -45,7 +45,7 @@ public class Introduction {
         this.date = df.format(d);
         phone = "phone";
         int x =uid.lastIndexOf("-")+1;
-        email =uid.substring(x)+ Config.EMAIL;
+        email = "intro-"+uid.substring(0,4)+Config.EMAIL;
         expired = false;
     }
 

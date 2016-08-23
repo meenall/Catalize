@@ -5,7 +5,7 @@ public class Config {
     public final  static String TWILIO_AUTH_TOKEN =System.getProperty("TWILIO_AUTH_TOKEN");
     public final  static String SEND_GRID_USER =System.getProperty("SEND_GRID_USER");
     public final  static String SEND_GRID_PASSWORD =System.getProperty("SEND_GRID_PASSWORD");
-    public final static  int MAX_NUMBERS = 10;
+    public final static  int MAX_NUMBERS = 500;
     public final  static String ERROR_EMAIL = "marcus.johnson226@gmail.com";
     public final  static String EMAIL = "@mail.catalizeapp.com";
 
@@ -19,7 +19,7 @@ public class Config {
     public  final  static  String EMAIL_MESSAGE1 = "Hi! You've received an introduction from %s to %s through Catalize, the networking and \n" +
             "connections app:\n" +
             "\n" +
-            "%s\n" +
+            '"' + "%s" + '"' + "\n" +
             "\n" +
             "To accept this introduction to your new connection, %s, simply reply to this message with YES . This introduction will\n" +
             "expire in 3 days. Learn more at catalizeapp.com. Happy connecting!";

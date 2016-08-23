@@ -15,11 +15,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -129,8 +131,8 @@ public class Account extends AppCompatActivity {
                                     Nav.number2 = Nav.person2;
                                     Nav.person2 = result2;
                                     prompt.append("Hello " + Nav.person1 + ", meet " + Nav.person2 + ". I am introducing you two because ");
-                                    Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
-                                            Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
+                                      //      Toast.LENGTH_SHORT).show();
                                     // prompt.requestFocus();
                                     //prompt.setText("Hello " + result + ", meet " + result2 + ". I am introducing you two because...");
                                     //Contacts.person1 = result;
@@ -184,8 +186,8 @@ public class Account extends AppCompatActivity {
                                         prompt.append("Hello " + Nav.person1 + ", meet " + result + ". I am introducing you two because ");
                                         // prompt.requestFocus();
                                     }
-                                    Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
-                                            Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
+                                      //      Toast.LENGTH_SHORT).show();
                                     //Contacts.person1 = result;
                                 }
                             });
@@ -197,8 +199,8 @@ public class Account extends AppCompatActivity {
 
         } else {
             prompt.append("Hello " + Nav.person1 + ", meet " + Nav.person2 + ". I am introducing you two because ");
-            Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, Nav.number1 + "  " + Nav.number2,
+              //      Toast.LENGTH_SHORT).show();
         }
         prompt.requestFocus();
 
@@ -239,8 +241,8 @@ public class Account extends AppCompatActivity {
                 intro.setBContact(Nav.number2);
                 intro.setBName(Nav.person2);
                 intro.setIntroducerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                intro.setBody(prompt.getText().toString());
-                new EndpointsAsyncTask(intro).execute();
+                intro.setBody("\"" + prompt.getText().toString() + "\"");
+//                new EndpointsAsyncTask(intro).execute();
 
 
 //                DbManager.getInstance().addIntroduction(intro);
@@ -276,17 +278,17 @@ public class Account extends AppCompatActivity {
                 });
                 dialog.show();
 
-                //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, "Hello " + Contacts.person2 + "! You've received an introduction from " + personName + " through Catalize, the networking and connections app:", null, null);
-                //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, et.getText().toString(), null, null);
-                //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, "Respond to this message to continue the conversation.", null, null);
+                //SmsManager.getDefault().sendTextMessage(Nav.number2, null, "Hello " + Nav.person2 + "! You've received an introduction from " + personName + " through Catalize, the networking and connections app:", null, null);
+                //SmsManager.getDefault().sendTextMessage(Nav.number2, null, prompt.getText().toString(), null, null);
+                //SmsManager.getDefault().sendTextMessage(Nav.number2, null, "Respond to this message to continue the conversation.", null, null);
 
-                //SmsManager.getDefault().sendTextMessage(Contacts.number1, null, "Hello " + Contacts.person1 + "! You've received an introduction from " + personName + " through Catalize, the networking and connections app:", null, null);
-                //SmsManager.getDefault().sendTextMessage(Contacts.number1, null, et.getText().toString(), null, null);
-                //SmsManager.getDefault().sendTextMessage(Contacts.number1, null, "Respond to this message to continue the conversation.", null, null);
+                //SmsManager.getDefault().sendTextMessage(Nav.number1, null, "Hello " + Nav.person1 + "! You've received an introduction from " + personName + " through Catalize, the networking and connections app:", null, null);
+                //SmsManager.getDefault().sendTextMessage(Nav.number1, null, prompt.getText().toString(), null, null);
+                //SmsManager.getDefault().sendTextMessage(Nav.number1, null, "Respond to this message to continue the conversation.", null, null);
 
 
-                //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, "Meenal says: Hey " + Contacts.person2 +  "! Thanks for stopping by the Catalize booth at CreateX Product Day at Georgia Tech!", null, null);
-                //SmsManager.getDefault().sendTextMessage(Contacts.number2, null, "Want to know  more about us? Check us out at catalizeapp.com." + "\n" + "Happy connecting!", null, null);
+                //SmsManager.getDefault().sendTextMessage(Nav.number2, null, "Meenal says: Hey " + Nav.person2 +  "! Thanks for stopping by the Catalize booth at CreateX Product Day at Georgia Tech!", null, null);
+                //SmsManager.getDefault().sendTextMessage(Nav.number2, null, "Want to know  more about us? Check us out at catalizeapp.com." + "\n" + "Happy connecting!", null, null);
 
                 //} catch (Exception e) {
                 //    AlertDialog.Builder alertDialogBuilder = new
@@ -428,8 +430,8 @@ public class Account extends AppCompatActivity {
                 INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         //searchView.clearFocus();
-        Toast.makeText(context, "HI",
-                Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "HI",
+          //      Toast.LENGTH_SHORT).show();
         //searchView.setQuery("", false);
         return true;
     }
