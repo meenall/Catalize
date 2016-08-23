@@ -97,35 +97,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         sharedPreferences = this.getSharedPreferences("com.catalizeapp.catalize_ss16_v5", Context.MODE_PRIVATE);
 
-        if (sharedPreferences.getString("first_name","")!="") {
-            if (sharedPreferences.getString("last_name","")!=""){
-                if (sharedPreferences.getString("email", "") != "") { //skip logging in if info has been previously entered
-                    Intent intent1 = new Intent(LoginActivity.this, Nav.class);
-                    startActivity(intent1);
-                }
-            }
-        }
-
-
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View view) {
-
-                if (firstName.getText().toString().matches("")|| lastName.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Please enter your first and last name", Toast.LENGTH_SHORT).show();
-                } else if (email.getText().toString().matches("")|| !email.getText().toString().contains("@")) {
-                    Toast.makeText(getApplicationContext(), "Please enter a valid email address", Toast.LENGTH_SHORT).show();
-                } else {
-                    sharedPreferences.edit().putString("first_name", firstName.getText().toString()).apply();
-                    sharedPreferences.edit().putString("last_name", lastName.getText().toString()).apply();
-                    sharedPreferences.edit().putString("email", email.getText().toString()).apply(); //gets the shared preferences for email and name
-
-
-                    Intent intent = new Intent(LoginActivity.this, Nav.class);
-                    // intent.putExtra("name_value", firstName.getText().toString());
-                    //intent.putExtra("last_name", lastName.getText().toString());
-                    //intent.putExtra("email_value", email.getText().toString());
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(LoginActivity.this, Nav.class);
+                // intent.putExtra("name_value", firstName.getText().toString());
+                //intent.putExtra("last_name", lastName.getText().toString());
+                //intent.putExtra("email_value", email.getText().toString());
+                startActivity(intent);
                 //startActivityForResult(new Intent(LoginActivity.this, Contacts.class), 10);
             }
         };

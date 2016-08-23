@@ -222,7 +222,7 @@ public class PagerActivity extends AppCompatActivity {
 
         ImageView img;
 
-        int[] bgs = new int[]{R.drawable.contacts, R.drawable.intro, R.drawable.log};
+        int[] bgs = new int[]{R.drawable.one, R.drawable.three, R.drawable.two};
 
         public PlaceholderFragment() {
         }
@@ -257,7 +257,7 @@ public class PagerActivity extends AppCompatActivity {
             }
 
             img = (ImageView) rootView.findViewById(R.id.section_img);
-            img.setBackgroundResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
+            img.setImageResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
 
             return rootView;
         }

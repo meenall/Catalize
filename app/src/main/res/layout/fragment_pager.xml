@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,29 +7,33 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/frameLayout">
 
         <ImageView
             android:id="@+id/section_img"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
+            android:layout_height="350dp"
             android:adjustViewBounds="true"
-            android:background="@drawable/contacts"
-            android:scaleType="fitCenter" />
-
+            android:scaleType="centerInside"
+            android:src="@drawable/one"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignRight="@+id/frameLayout"
+            android:layout_alignEnd="@+id/frameLayout" />
 
     </FrameLayout>
 
-
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
 
         <TextView
             android:id="@+id/section_label"
@@ -37,9 +41,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="22dp"
+            android:paddingTop="15dp"
             android:textColor="@android:color/white"
             tools:text="Page One"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center_horizontal" />
 
         <TextView
             android:id="@+id/section"
@@ -47,13 +56,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:alpha="0.5"
+            android:alpha="0.7"
             android:gravity="center"
             android:text="Add a long description here about your app's important feature."
             android:textColor="@android:color/white" />
 
-
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>
 

@@ -9,8 +9,8 @@ public class Config {
     public final  static String ERROR_EMAIL = "marcus.johnson226@gmail.com";
     public final  static String EMAIL = "@mail.catalizeapp.com";
 
-    public final static  String EMAIL_SUBJECT  = "Catalize Introduction ( %s )";
-    public final static  String CHAT_SUBJECT  = "Chat from Introduction ( %s )";
+    public final static  String EMAIL_SUBJECT  = "Introduction from Catalize ( %s )"; //FIX THIS
+    public final static  String CHAT_SUBJECT  = "Introduction from Catalize ( %s )";
     public final static  String ACCEPT_SUBJECT  = "Introduction  Accepted ( %s )";
     public final static  String EXPIRED_SUBJECT  = "Introduction  Expired ( %s )";
 
@@ -41,7 +41,7 @@ public class Config {
     public static final String COMPLETE_MESSAGE ="Both parties have accepted this introduction. Reply to this message to continue the conversation. This chat will expire in 7 days. Happy connecting!" ;
 
 
-    public static final String DAY1_MESSAGE ="You have 2 days to reply to this introduction. Reply YES to continue the conversatio" ;
-    public static final String DAY2_MESSAGE ="You have 1 day to reply to this introduction. Reply YES to continue the conversatio";
+    public static final String DAY1_MESSAGE ="You have 2 days to reply to this introduction. Reply YES to continue the conversation" ;
+    public static final String DAY2_MESSAGE ="You have 1 day to reply to this introduction. Reply YES to continue the conversation";
 
 }

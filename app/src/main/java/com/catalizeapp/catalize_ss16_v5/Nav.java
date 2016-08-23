@@ -262,8 +262,8 @@ public class Nav extends AppCompatActivity
                     searchView.clearFocus();
                     searchView.setQuery("", false);
                     if (newname.getText().toString() == "" || newperson.getText().toString() == "") {
-                        Toast.makeText(context, "Please fill in both fields.",
-                                Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Please fill in both fields.",
+                          //      Toast.LENGTH_SHORT).show();
                     } else {
                         person2 = newname.getText().toString();
                         number2 = newperson.getText().toString();
@@ -480,13 +480,11 @@ public class Nav extends AppCompatActivity
                     .setPositiveButton("Ok",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    flag = true;
-                                    //ok = true;
-                                    Intent intentLogOut = new Intent(Nav.this, LoginActivity.class);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.clear();
-                                    editor.commit();
-                                    startActivity(intentLogOut);
+                                    Utils.saveSharedSetting(Nav.this, Nav.PREF_USER_FIRST_TIME, "true");
+                                    FirebaseAuth.getInstance().signOut();
+                                    Intent intent = new Intent(Nav.this, FireLoginActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
                                     finish();
                                 }
                             });
