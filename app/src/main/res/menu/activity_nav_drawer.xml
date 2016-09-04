@@ -14,8 +14,8 @@
 
         <item
             android:id="@+id/bug"
-            android:icon="@drawable/bug"
-            android:title="@string/report_bug" >
+            android:icon="@drawable/feedback"
+            android:title="Feedback" >
         </item>
 
         <item

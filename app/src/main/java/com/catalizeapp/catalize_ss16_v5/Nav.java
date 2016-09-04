@@ -27,6 +27,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -105,6 +106,8 @@ public class Nav extends AppCompatActivity
         }
         super.onCreate(savedInstanceState);
         context = this;
+
+//        getActionBar()/* or getSupportActionBar() */.setTitle(Html.fromHtml("<font color=\"white\">" + getString(R.string.app_name) + "</font>"));
 
         isUserFirstTime = Boolean.valueOf(Utils.readSharedSetting(Nav.this, PREF_USER_FIRST_TIME, "true"));
         Intent introIntent = new Intent(Nav.this, PagerActivity.class);

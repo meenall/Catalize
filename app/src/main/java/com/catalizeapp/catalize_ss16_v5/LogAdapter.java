@@ -1,6 +1,7 @@
 package com.catalizeapp.catalize_ss16_v5;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,7 @@ public class LogAdapter extends ArrayAdapter<Introduction> {
         holder.date.setText( intro.getDate().substring(5,10));
         if(intro.getAReplied() && intro.getBReplied()){
             holder.complete.setVisibility(View.VISIBLE);
+            holder.complete.setTextColor(Color.parseColor("#48b2e8"));
 
         }
 

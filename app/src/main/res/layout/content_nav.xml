@@ -20,6 +20,7 @@
             android:paddingRight="7dp">
             <LinearLayout
                 android:id="@+id/data_container"
+                android:background="#fafafa"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/connect"

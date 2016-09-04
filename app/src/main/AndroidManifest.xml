@@ -74,7 +74,7 @@
 
         <activity
             android:name=".ReportBug"
-            android:label="Catalize"
+            android:label="Feedback"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|adjustResize">
             <meta-data

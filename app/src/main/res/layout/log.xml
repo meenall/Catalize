@@ -8,5 +8,8 @@
         android:layout_height="match_parent"
         android:divider="#000000"
         android:dividerHeight="2px"
+        android:focusableInTouchMode="false"
+        android:listSelector="@android:color/transparent"
+        android:focusable="false"
         android:id="@+id/log_list"/>
 </LinearLayout>

@@ -16,13 +16,14 @@ public class Config {
 
 
 
-    public  final  static  String EMAIL_MESSAGE1 = "Hi! You've received an introduction from %s to %s through Catalize, the networking and \n" +
+    public  final  static  String EMAIL_MESSAGE1 = "Hello,\n" + "You've received an introduction from %s to %s through Catalize, the networking and \n" +
             "connections app:\n" +
             "\n" +
             '"' + "%s" + '"' + "\n" +
             "\n" +
             "To accept this introduction to your new connection, %s, simply reply to this message with YES . This introduction will\n" +
-            "expire in 3 days. Learn more at catalizeapp.com. Happy connecting!";
+            "expire in 3 days. Happy connecting!\n" +
+            "Sincerely, \n The Catalize Team \n Learn more at catalizeapp.com";
     public final  static  String EMAIL_MESSAGE2 = "You have accepted this introduction.";
 
     public final  static  String TEXT_MESSAGE1 = "Hi! You've received an introduction from %s to %s through Catalize, the networking and \n" +

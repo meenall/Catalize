@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -22,6 +23,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -241,8 +243,11 @@ public class Account extends AppCompatActivity {
                 intro.setBContact(Nav.number2);
                 intro.setBName(Nav.person2);
                 intro.setIntroducerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                intro.setBody("\"" + prompt.getText().toString() + "\"");
+                intro.setBody(prompt.getText().toString());
+                //Toast.makeText(context, prompt.getText().toString(),
+                              ///Toast.LENGTH_SHORT).show();
 //                new EndpointsAsyncTask(intro).execute();
+
 
 
 //                DbManager.getInstance().addIntroduction(intro);

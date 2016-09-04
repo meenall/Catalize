@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:id="@+id/log_date"
-        android:textSize="21sp"
-        android:typeface="monospace"/>
+        android:textSize="21sp" />
 
     <TextView
         android:text="You introduced person a to person @string/bottom_sheet_behavior"
@@ -22,7 +21,6 @@
         android:layout_alignParentRight="true"
         android:id="@+id/log_intro_text"
         android:textSize="17sp"
-        android:typeface="monospace"
         android:maxLines="5"
         android:layout_width="250dp"/>
 

@@ -9,8 +9,8 @@ android {
         applicationId "com.catalizeapp.catalize_ss16_v5"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 7
-        versionName "7.0"
+        versionCode 10
+        versionName "10.0"
     }
     buildTypes {
         release {
